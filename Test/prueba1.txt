@@ -1,0 +1,5 @@
+program pruebaNueva;
+main() {
+    variable1 = 1 + 2;
+    variable1 = unaFuncion();
+}

@@ -118,17 +118,15 @@ def t_ID(t):
     return t
 
 def t_CTE_INT(t):
-    def t_CTE_INT(t):
     r'[0-9]+'
     t.value = int(t.value)
     return t
 
 def t_newline(t):
-    def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-t_ignore = '\t'
+t_ignore = ' \t'
 
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])

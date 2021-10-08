@@ -1,0 +1,95 @@
+digraph G {
+ 2[ID = pruebaNueva]
+12[ID = variable1]
+11[label = identLonely]
+11->12
+10[label = identifier]
+10->11
+13[Operador = =]
+22[Entero = 1]
+21[label = someInt]
+21->22
+20[label = constant]
+20->21
+19[label = auction]
+19->20
+18[label = idioms]
+18->19
+17[label = factor]
+17->18
+16[label = term]
+16->17
+23[Operador = +]
+31[Entero = 2]
+30[label = someInt]
+30->31
+29[label = constant]
+29->30
+28[label = auction]
+28->29
+27[label = idioms]
+27->28
+26[label = factor]
+26->27
+25[label = term]
+25->26
+24[label = expression]
+24->25
+15[label = expressionOperation]
+15->16
+15->23
+15->24
+14[label = expression]
+14->15
+9[label = assignment]
+9->10
+9->13
+9->14
+8[label = statute]
+8->9
+37[ID = variable1]
+36[label = identLonely]
+36->37
+35[label = identifier]
+35->36
+38[Operador = =]
+45[ID = unaFuncion]
+47[Vacío = callFinal]
+46[label = callAux]
+46->47
+44[label = functionCall]
+44->45
+44->46
+43[label = auction]
+43->44
+42[label = idioms]
+42->43
+41[label = factor]
+41->42
+40[label = term]
+40->41
+39[label = expression]
+39->40
+34[label = assignment]
+34->35
+34->38
+34->39
+33[label = statute]
+33->34
+32[label = blockAux]
+32->33
+7[label = blockRecursive]
+7->8
+7->32
+6[label = blockAux]
+6->7
+5[label = block]
+5->6
+4[label = principal]
+4->5
+3[label = programVer3]
+3->4
+1[label = program]
+1->2
+1->3
+}

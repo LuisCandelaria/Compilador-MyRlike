@@ -1,6 +1,6 @@
 # -----------------------------------------------------------------------------
 # analizadorSintactico.py
-# Version 1.0
+# Version 1.1
 #
 # Luis Eugenio Candelaria Azpilcueta
 # A00816826
@@ -41,7 +41,7 @@ precedence = (
     ('left', 'TIMES', 'DIVIDE'),
     ('left', 'LTHAN', 'GTHAN', 'DIFF', 'EQUAL'),
     ('left', 'COLON', 'SEMICOLON', 'COMA'),
-    ('left', 'LBRACK', 'RBRACK', 'LSQBRACK', 'RSQBRACK'),
+    ('left', 'LBRACK', 'RBRACK', 'LSBRACK', 'RSBRACK'),
     ('left', 'LPAREN', 'RPAREN')
 )
 
@@ -78,7 +78,7 @@ def p_variables(p):
     '''
     p[0] = variables(p[2], "variables")
 
-def p_varAxu(p):
+def p_varAux(p):
     '''
     varAux : oneVar
     | sameType
@@ -88,14 +88,14 @@ def p_varAxu(p):
 
 def p_oneVar(p):
     '''
-    oneVar : type COLON identifierVar SEMICOLON
+    oneVar : typeVar COLON identifierVar SEMICOLON
     '''
     p[0] = oneVar(p[1], p[3], "oneVar")
 
 def p_sameType(p):
     '''
-    sameType : type COLON identifierVar COMA sameTypeFinal
-    | type COLON identifierVar COMA sameTypeRecursive
+    sameType : typeVar COLON identifierVar COMA sameTypeFinal
+    | typeVar COLON identifierVar COMA sameTypeRecursive
     '''
     p[0] = sameType(p[1], p[3], p[5], "sameType")
 
@@ -115,7 +115,7 @@ def p_sameTypeRecursive(p):
 
 def p_newType(p):
     '''
-    newType : type COLON identifierVar SEMICOLON varAux
+    newType : typeVar COLON identifierVar SEMICOLON varAux
     '''
     p[0] = newType(p[1], p[3], p[5], "newType")
 
@@ -136,7 +136,6 @@ def p_funcAux(p):
     '''
     funcAux : FUNCTION typeFunction ID LPAREN withParameters
     | FUNCTION typeFunction ID LPAREN RPAREN funcVer1
-    | FUNCTION typeFunction ID LPAREN withParameters
     | FUNCTION typeFunction ID LPAREN RPAREN funcVer2
     '''
     p[0] = funcAux(p[2], ID(p[3]), p[5], "funcAux")
@@ -148,7 +147,7 @@ def p_typeFunction(p):
     | CHAR
     | VOID
     '''
-    p[0] = typeFunction(p[1])
+    p[0] = typeFunction(p[1], "typeFunction")
 
 def p_withParameters(p):
     '''
@@ -185,14 +184,14 @@ def p_varAuxLoc(p):
 
 def p_oneVarLoc(p):
     '''
-    oneVarLoc : type COLON identifier SEMICOLON
+    oneVarLoc : typeVar COLON identifier SEMICOLON
     '''
     p[0] = oneVarLoc(p[1], p[3], "oneVarLoc")
 
 def p_sameTypeLoc(p):
     '''
-    sameTypeLoc : type COLON identifier COMA sameTypeFinalLoc
-    | type COLON identifier COMA sameTypeRecursiveLoc
+    sameTypeLoc : typeVar COLON identifier COMA sameTypeFinalLoc
+    | typeVar COLON identifier COMA sameTypeRecursiveLoc
     '''
     p[0] = sameTypeLoc(p[1], p[3], p[5], "sameTypeLoc")
 
@@ -205,14 +204,14 @@ def p_sameTypeFinalLoc(p):
 def p_sameTypeRecursiveLoc(p):
     '''
     sameTypeRecursiveLoc : identifier COMA sameTypeRecursiveLoc
-    | identifier COMA smaeTypeFinalLoc
+    | identifier COMA sameTypeFinalLoc
     | identifier SEMICOLON varAuxLoc
     '''
     p[0] = sameTypeRecursiveLoc(p[1], p[3], "sameTypeRecursiveLoc")
 
 def p_newTypeLoc(p):
     '''
-    newTypeLoc : type COLON identifier SEMICOLON varAuxLoc
+    newTypeLoc : typeVar COLON identifier SEMICOLON varAuxLoc
     '''
     p[0] = newTypeLoc(p[1], p[3], p[5], "newTypeLoc")
 
@@ -226,14 +225,14 @@ def p_parameters(p):
 
 def p_oneParam(p):
     '''
-    oneParam : type COLON identifierVar
+    oneParam : typeVar COLON identifierVar
     '''
     p[0] = oneParam(p[1], p[3], "oneParam")
 
 def p_sameTypeParam(p):
     '''
-    sameTypeParam : type COLON identifierVar COMA sameTypeParamFinal
-    | type COLON identifierVar COMA sameTypeParamRecursive
+    sameTypeParam : typeVar COLON identifierVar COMA sameTypeParamFinal
+    | typeVar COLON identifierVar COMA sameTypeParamRecursive
     '''
     p[0] = sameTypeParam(p[1], p[3], p[5], "sameTypeParam")
 
@@ -253,22 +252,16 @@ def p_sameTypeParamRecursive(p):
 
 def p_newParam(p):
     '''
-    newParam : type COLON identifierVar SEMICOLON parameters
+    newParam : typeVar COLON identifierVar SEMICOLON parameters
     '''
     p[0] = newParam(p[1], p[3], p[5], "newParam")
 
 def p_identifierVar(p):
     '''
-    identifierVar : identLonelyVar
+    identifierVar : identLonely
     | identArrayVar
     '''
     p[0] = identifierVar(p[1], "identifierVar")
-
-def p_identLonelyVar(p):
-    '''
-    identLonelyVar : ID
-    '''
-    p[0] = identLonelyVar(ID(p[1]), "identLonelyVar")
 
 def p_identArrayVar(p):
     '''
@@ -276,13 +269,13 @@ def p_identArrayVar(p):
     '''
     p[0] = identArrayVar(ID(p[1]), p[3], "identArrayVar")
 
-def p_type(p):
+def p_typeVar(p):
     '''
-    type : INT
+    typeVar : INT
     | FLOAT
     | CHAR
     '''
-    p[0] = type(p[1])
+    p[0] = typeVar(p[1], "typeVar")
 
 def p_principal(p):
     '''
@@ -326,7 +319,7 @@ def p_statute(p):
     | functionCall SEMICOLON
     | returnStatement SEMICOLON
     | regressionFunc SEMICOLON
-    | plotXY SEMICOLON
+    | plotXYFunc SEMICOLON
     '''
     p[0] = statute(p[1], "statute")
 
@@ -397,14 +390,14 @@ def p_writingString(p):
     '''
     writingString : CTE_STRING
     '''
-    p[0] = writingString(String(p[1]))
+    p[0] = writingString(String(p[1]), "writingString")
 
 def p_writingRecursive(p):
     '''
     writingRecursive : writingString COMA writingFinal
     | expression COMA writingFinal
-    | writingString COMA p_writingRecursive
-    | expression COMA p_writingRecursive
+    | writingString COMA writingRecursive
+    | expression COMA writingRecursive
     '''
     p[0] = writingRecursive(p[1], p[3], "writingRecursive")
 
@@ -430,7 +423,7 @@ def p_readingFinal(p):
 def p_readingRecursive(p):
     '''
     readingRecursive : identifier COMA readingRecursive
-     identifier COMA readingFinal
+    | identifier COMA readingFinal
     '''
     p[0] = readingRecursive(p[1], p[3], "readingRecursive")
 
@@ -455,23 +448,29 @@ def p_nonconditional(p):
 
 def p_functionCall(p):
     '''
-    functionCall : ID LPAREN callAux RPAREN
+    functionCall : ID LPAREN callAux
     '''
     p[0] = functionCall(ID(p[1]), p[3], "functionCall")
 
 def p_callAux(p):
     '''
-    callAux : expression
+    callAux : expression RPAREN
     | callRecursive
+    | callFinal
     '''
     p[0] = callAux(p[1], "callAux")
 
 def p_callRecursive(p):
     '''
-    callRecursive : expression COMA callRecursive
-    | expression COMA expression
+    callRecursive : expression COMA callAux
     '''
     p[0] = callRecursive(p[1], p[3], "callRecursive")
+
+def p_callFinal(p):
+    '''
+    callFinal : RPAREN
+    '''
+    p[0] = callFinal("callFinal")
 
 def p_expression(p):
     '''
@@ -519,7 +518,7 @@ def p_factorOperation(p):
 
 def p_idioms(p):
     '''
-    idioms : clause
+    idioms : auction
     | idiomsOperation
     '''
     p[0] = idioms(p[1], "idioms")
@@ -621,8 +620,8 @@ def p_expressionVar(p):
 
 def p_expressionOperationVar(p):
     '''
-    expressionOperationVar : termVar PLUS expressionOperationVar
-    | termVar MINUS expressionOperationVar
+    expressionOperationVar : termVar PLUS expressionVar
+    | termVar MINUS expressionVar
     '''
     p[0] = expressionOperationVar(p[1], Operador(p[2]), p[3], "expressionOperationVar")
 
@@ -635,8 +634,8 @@ def p_termVar(p):
 
 def p_termOperationVar(p):
     '''
-    termOperationVar : auctionVar TIMES termOperationVar
-    | auctionVar DIVIDE termOperationVar
+    termOperationVar : auctionVar TIMES termVar
+    | auctionVar DIVIDE termVar
     '''
     p[0] = termOperationVar(p[1], Operador(p[2]), p[3], "termOperationVar")
 
@@ -703,14 +702,14 @@ def buscarFicheros(directorio):
 # también hace al código más complejo.
 # ............................................................... #
 def traducir(result):
-    graphFile = open('graphviztrhee.vz', 'w')
+    graphFile = open('graph.txt', 'w')
     graphFile.write(result.traducir())
     graphFile.close()
-    print("El programa traducido se guardo en \"graphviztrhee.vz\"")
+    print("El programa traducido se guardo en \"graph.txt\"")
 
 # Dirección de la carpeta con los archivos de prueba, se debe cambiar si se está en otro dispositivo
 directorio = '/Users/luiskande/Documents/Documentos ITESM/15º Semestre/Compiladores/Proyecto Final/Test/'
-archivo = buscarficheros(directorio)
+archivo = buscarFicheros(directorio)
 test = directorio + archivo
 
 # Ejecución del analizadorLexico
