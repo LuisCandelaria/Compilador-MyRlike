@@ -1,94 +1,154 @@
 digraph G {
  2[ID = pruebaNueva]
-12[ID = variable1]
-11[label = identLonely]
-11->12
-10[label = identifier]
-10->11
-13[Operador = =]
-22[Entero = 1]
-21[label = someInt]
-21->22
-20[label = constant]
-20->21
-19[label = auction]
-19->20
-18[label = idioms]
-18->19
-17[label = factor]
-17->18
-16[label = term]
-16->17
-23[Operador = +]
-31[Entero = 2]
-30[label = someInt]
-30->31
-29[label = constant]
-29->30
-28[label = auction]
-28->29
-27[label = idioms]
-27->28
-26[label = factor]
-26->27
-25[label = term]
-25->26
-24[label = expression]
-24->25
-15[label = expressionOperation]
-15->16
-15->23
-15->24
-14[label = expression]
-14->15
-9[label = assignment]
+7[Tipo = int]
+10[ID = i]
+9[label = identLonely]
 9->10
-9->13
-9->14
-8[label = statute]
+8[label = identifierVar]
 8->9
-37[ID = variable1]
-36[label = identLonely]
-36->37
-35[label = identifier]
-35->36
-38[Operador = =]
-45[ID = unaFuncion]
-47[Vacío = callFinal]
-46[label = callAux]
-46->47
-44[label = functionCall]
-44->45
-44->46
-43[label = auction]
-43->44
-42[label = idioms]
-42->43
-41[label = factor]
-41->42
-40[label = term]
-40->41
-39[label = expression]
-39->40
-34[label = assignment]
-34->35
-34->38
-34->39
-33[label = statute]
-33->34
-32[label = blockAux]
+14[ID = j]
+13[label = identLonely]
+13->14
+12[label = identifierVar]
+12->13
+18[ID = k]
+23[Entero = 100]
+22[label = constantVar]
+22->23
+21[label = auctionVar]
+21->22
+20[label = termVar]
+20->21
+19[label = expressionVar]
+19->20
+17[label = identArrayVar]
+17->18
+17->19
+16[label = identifierVar]
+16->17
+26[Tipo = float]
+29[ID = p]
+28[label = identLonely]
+28->29
+27[label = identifierVar]
+27->28
+33[ID = q]
+32[label = identLonely]
 32->33
-7[label = blockRecursive]
-7->8
-7->32
-6[label = blockAux]
+31[label = identifierVar]
+31->32
+30[label = sameTypeFinal]
+30->31
+25[label = sameType]
+25->26
+25->27
+25->30
+24[label = varAux]
+24->25
+15[label = sameTypeRecursive]
+15->16
+15->24
+11[label = sameTypeRecursive]
+11->12
+11->15
+6[label = sameType]
 6->7
-5[label = block]
+6->8
+6->11
+5[label = varAux]
 5->6
-4[label = principal]
+4[label = variables]
 4->5
-3[label = programVer3]
+42[ID = variable1]
+41[label = identLonely]
+41->42
+40[label = identifier]
+40->41
+43[Operador = =]
+52[Entero = 1]
+51[label = someInt]
+51->52
+50[label = constant]
+50->51
+49[label = auction]
+49->50
+48[label = idioms]
+48->49
+47[label = factor]
+47->48
+46[label = term]
+46->47
+53[Operador = +]
+61[Entero = 2]
+60[label = someInt]
+60->61
+59[label = constant]
+59->60
+58[label = auction]
+58->59
+57[label = idioms]
+57->58
+56[label = factor]
+56->57
+55[label = term]
+55->56
+54[label = expression]
+54->55
+45[label = expressionOperation]
+45->46
+45->53
+45->54
+44[label = expression]
+44->45
+39[label = assignment]
+39->40
+39->43
+39->44
+38[label = statute]
+38->39
+67[ID = variable1]
+66[label = identLonely]
+66->67
+65[label = identifier]
+65->66
+68[Operador = =]
+75[ID = unaFuncion]
+77[Vacío = callFinal]
+76[label = callAux]
+76->77
+74[label = functionCall]
+74->75
+74->76
+73[label = auction]
+73->74
+72[label = idioms]
+72->73
+71[label = factor]
+71->72
+70[label = term]
+70->71
+69[label = expression]
+69->70
+64[label = assignment]
+64->65
+64->68
+64->69
+63[label = statute]
+63->64
+62[label = blockAux]
+62->63
+37[label = blockRecursive]
+37->38
+37->62
+36[label = blockAux]
+36->37
+35[label = block]
+35->36
+34[label = principal]
+34->35
+3[label = programVer2]
 3->4
+3->34
 1[label = program]
 1->2
 1->3

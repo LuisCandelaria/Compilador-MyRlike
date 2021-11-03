@@ -602,32 +602,17 @@ class funcAux(Node):
         return id
 
 class typeFunction(Node):
-    def __init__(self, son1, name):
+    def __init__(self,name):
         self.name = name
-        self.son1 = son1
     
-    def imprimir(self, ident):
-        #if str(type(self.son1)) == "<type 'tuple'>":
-        #elif str(type(self.son1)) == "<type 'instance'>":
-        if type(self.son1) == type(tuple()):
-            self.son1[0].imprimir(" " + ident)
-        else:
-            self.son1.imprimir(" " + ident)
-        
-        print(ident + "Nodo: " + self.name)
-    
+    def imprimir(self,ident):
+        print(ident+"Tipo: "+str(self.name))
+
     def traducir(self):
         global txt
         id = incrementarContador()
-
-        if type(self.son1) == type(tuple()):
-            son1 = self.son1[0].traducir()
-        else:
-            son1 = self.son1.traducir()
+        txt += id + "[Tipo = "+str(self.name)+"]"+"\n"
         
-        txt += id + "[label = "+self.name+"]"+"\n"
-        txt += id + "->" + son1 + "\n"
-
         return id
 
 class withParameters(Node):
@@ -1322,32 +1307,17 @@ class identArrayVar(Node):
         return id
 
 class typeVar(Node):
-    def __init__(self, son1, name):
+    def __init__(self,name):
         self.name = name
-        self.son1 = son1
     
-    def imprimir(self, ident):
-        #if str(type(self.son1)) == "<type 'tuple'>":
-        #elif str(type(self.son1)) == "<type 'instance'>":
-        if type(self.son1) == type(tuple()):
-            self.son1[0].imprimir(" " + ident)
-        else:
-            self.son1.imprimir(" " + ident)
-        
-        print(ident + "Nodo: " + self.name)
-    
+    def imprimir(self,ident):
+        print(ident+"Tipo: "+str(self.name))
+
     def traducir(self):
         global txt
         id = incrementarContador()
-
-        if type(self.son1) == type(tuple()):
-            son1 = self.son1[0].traducir()
-        else:
-            son1 = self.son1.traducir()
+        txt += id + "[Tipo = "+str(self.name)+"]"+"\n"
         
-        txt += id + "[label = "+self.name+"]"+"\n"
-        txt += id + "->" + son1 + "\n"
-
         return id
 
 class principal(Node):

@@ -22,6 +22,7 @@
 # 5. Función que traduce el archivo de prueba a formato de gráfica
 # 6. Directorio
 # 7. Parser
+# 8. Renglones del arbol
 # -----------------------------------------------------------------------------
 
 # Librerías necesarias para la ejecución del archivo
@@ -33,6 +34,7 @@ from analizadorLexico import tokens
 from analizadorLexico import f_analisisLexico
 from sys import stdin
 from analizadorSemantico import *
+import roma as rm
 
 # Precedencia
 precedence = (
@@ -147,7 +149,7 @@ def p_typeFunction(p):
     | CHAR
     | VOID
     '''
-    p[0] = typeFunction(p[1], "typeFunction")
+    p[0] = typeFunction(p[1])
 
 def p_withParameters(p):
     '''
@@ -275,7 +277,7 @@ def p_typeVar(p):
     | FLOAT
     | CHAR
     '''
-    p[0] = typeVar(p[1], "typeVar")
+    p[0] = typeVar(p[1])
 
 def p_principal(p):
     '''
@@ -726,3 +728,28 @@ result = parser.parse(cadena)
 
 # Ejecución de la traducción (analizadorSemantico)
 traducir(result)
+
+# ............................................................... #
+# Esta función guarda todas las lineas del arbol en graph.txt en
+# un arreglo para futuros analisis, también eliminar el espacio
+# extra que se escribe en el 2do renglon del arbol, cosa que no he
+# podido evitar.
+# ............................................................... #
+def clean():
+    f = open("graph.txt", "r")
+    text = f.read()
+    f.close()
+    lines = text.splitlines()
+    lines.pop(0)
+    lines.pop(len(lines)-1)
+    line = lines[0]
+    fixed = ""
+    for i in range(1, len(line)):
+        character = line[i]
+        fixed += character
+    lines[0] = fixed
+    return lines
+
+tree = clean()
+
+rm.init(tree)

@@ -1,4 +1,7 @@
 program pruebaNueva;
+vars
+    int: i, j, k[100];
+    float: p, q;
 main() {
     variable1 = 1 + 2;
     variable1 = unaFuncion();
