@@ -11,6 +11,8 @@
 #
 # -----------------------------------------------------------------------------
 
+from classVariables import *
+
 class FuncionReturn():
     especie = "Retorno"
     def __init__(self, ID, tipo, parametros, variablesLocales, estatutos):
@@ -21,7 +23,10 @@ class FuncionReturn():
         self.estatutos = estatutos
     
     def imprimirDatos(self):
-        print(self.ID + "\t" self.tipo + "\t")
+        print(self.ID + "\t" + self.tipo + "\t")
+        print(self.parametros)
+        print(self.variablesLocales)
+        print(self.estatutos)
 
 class FunctionVoid():
     especie = "Void"
@@ -32,5 +37,8 @@ class FunctionVoid():
         self.estatutos = estatutos
     
     def imprimirDatos(self):
-        print(self.ID + "\t" self.especie + "\t")
+        print(self.ID + "\t" + self.especie + "\t")
+        print(self.parametros)
+        print(self.variablesLocales)
+        print(self.estatutos)
 

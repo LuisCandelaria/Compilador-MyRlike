@@ -2125,13 +2125,11 @@ class conditional(Node):
         return id
 
 class nonconditional(Node):
-    def __init__(self, son1, son2, son3, son4, son5, name):
+    def __init__(self, son1, son2, son3, name):
         self.name = name
         self.son1 = son1
         self.son2 = son2
         self.son3 = son3
-        self.son4 = son4
-        self.son5 = son5
     
     def imprimir(self, ident):
         #if str(type(self.son1)) == "<type 'tuple'>":
@@ -2150,16 +2148,6 @@ class nonconditional(Node):
             self.son3[0].imprimir(" " + ident)
         else:
             self.son3.imprimir(" " + ident)
-        
-        if type(self.son4) == type(tuple()):
-            self.son4[0].imprimir(" " + ident)
-        else:
-            self.son4.imprimir(" " + ident)
-        
-        if type(self.son5) == type(tuple()):
-            self.son5[0].imprimir(" " + ident)
-        else:
-            self.son5.imprimir(" " + ident)
         
         print(ident + "Nodo: " + self.name)
     
@@ -2182,22 +2170,10 @@ class nonconditional(Node):
         else:
             son3 = self.son3.traducir()
         
-        if type(self.son4) == type(tuple()):
-            son4 = self.son4[0].traducir()
-        else:
-            son4 = self.son4.traducir()
-        
-        if type(self.son5) == type(tuple()):
-            son5 = self.son5[0].traducir()
-        else:
-            son5 = self.son5.traducir()
-        
         txt += id + "[label = "+self.name+"]"+"\n"
         txt += id + "->" + son1 + "\n"
         txt += id + "->" + son2 + "\n"
         txt += id + "->" + son3 + "\n"
-        txt += id + "->" + son4 + "\n"
-        txt += id + "->" + son5 + "\n"
         return id
 
 class functionCall(Node):

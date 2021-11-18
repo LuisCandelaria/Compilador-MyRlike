@@ -51,7 +51,7 @@ def checkPriority(operator, nextOperator):
 
 def solve(pila):
     if(len(pila) == 1):
-        return pila[0]
+        return int(pila[0])
     if(len(pila) == 3):
         result = fastResolve(pila)
         return result
@@ -76,4 +76,7 @@ def solve(pila):
 
 def init(pila):
     result = solve(pila)
-    return result
+    if(isinstance(result, int)):
+        return result
+    else:
+        return "no es entero"

@@ -2,6 +2,17 @@ program pruebaNueva;
 vars
     int: i, j, k[100];
     float: p, q;
+function void idFunction(int: f, z, ww; float: g, t; char: w, hh)
+vars
+    int: h;
+    float: m, n;
+    char: r[5];
+{
+    i = 1 + 2;
+    for i = 1 to i < 5 do {
+        h = 7 * 2;
+    }
+}
 main() {
     variable1 = 1 + 2;
     variable1 = unaFuncion();

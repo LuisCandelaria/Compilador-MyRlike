@@ -137,10 +137,15 @@ def p_recursiveFunc(p):
 def p_funcAux(p):
     '''
     funcAux : FUNCTION typeFunction ID LPAREN withParameters
-    | FUNCTION typeFunction ID LPAREN RPAREN funcVer1
-    | FUNCTION typeFunction ID LPAREN RPAREN funcVer2
+    | FUNCTION typeFunction ID emptyPar funcVer1
+    | FUNCTION typeFunction ID emptyPar funcVer2
     '''
     p[0] = funcAux(p[2], ID(p[3]), p[5], "funcAux")
+
+def p_emptyPar(p):
+    '''
+    emptyPar : LPAREN RPAREN
+    '''
 
 def p_typeFunction(p):
     '''
@@ -247,8 +252,8 @@ def p_sameTypeParamFinal(p):
 def p_sameTypeParamRecursive(p):
     '''
     sameTypeParamRecursive : identifierVar  COMA sameTypeParamRecursive
-    | identifierVar COMA sameTypeFinal
-    | identifier SEMICOLON parameters
+    | identifierVar COMA sameTypeParamFinal
+    | identifierVar SEMICOLON parameters
     '''
     p[0] = sameTypeParamRecursive(p[1], p[3], "sameTypeParamRecursive")
 
@@ -444,9 +449,9 @@ def p_conditional(p):
 
 def p_nonconditional(p):
     '''
-    nonconditional : FOR identifier ASSIGN expression TO expression DO block
+    nonconditional : FOR assignment TO expression DO block
     '''
-    p[0] = nonconditional(p[2], Operador(p[3]), p[4], p[6], p[8], "nonconditional")
+    p[0] = nonconditional(p[2], p[4], p[6], "nonconditional")
 
 def p_functionCall(p):
     '''

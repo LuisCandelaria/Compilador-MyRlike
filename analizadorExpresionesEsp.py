@@ -19,6 +19,7 @@
 
 import analizadorArbol as aA
 import solver as svr
+import sys
 
 tree = []
 
@@ -72,8 +73,10 @@ def an_auctionVar(auctionVar):
         constant = hijos[0]
         an_operadorAndconstant(constant)
     else:
-        otherExpressionVar = hijo
-        an_otherExpressionVar(otherExpressionVar)
+        print("No quiero parentesis en los corchetes")
+        sys.exit()
+        #otherExpressionVar = hijo
+        #an_otherExpressionVar(otherExpressionVar)
 
 def an_termVar(termVar):
     global tree

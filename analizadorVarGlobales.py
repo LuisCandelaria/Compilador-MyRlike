@@ -150,9 +150,13 @@ def createVarFromList(IDs, tipo):
                 print(ID + " already in dictionary")
                 sys.exit()
             else:
-                operation = expVar.init(expressionVar, tree)
-                obj = VariableArreglo(ID, operation, tipo)
-                dictVariablesGlobales[ID] = obj
+                tamaño = expVar.init(expressionVar, tree)
+                try:
+                    obj = VariableArreglo(ID, tamaño, tipo)
+                    dictVariablesGlobales[ID] = obj
+                except:
+                    print("El arreglo debe ser tamaño entero (VarGlobal)")
+                    sys.exit()
         else:
             ID = i
             if(IDinDict(ID)):
@@ -166,7 +170,6 @@ def createVarFromList(IDs, tipo):
 def createVar(ID, tipo):
     global tree
     global dictVariablesGlobales
-    lenght = len(ID)
     if(isinstance(ID, list)):
         #its an array
         ID = ID[0]
@@ -182,7 +185,8 @@ def createVar(ID, tipo):
                 obj = VariableArreglo(ID, tamaño, tipo)
                 dictVariablesGlobales[ID] = obj
             except:
-                print("El arrelo debe ser tamaño entero")
+                print("aqui")
+                print("El arreglo debe ser tamaño entero (VarGlobal)")
                 sys.exit()
     else:
         ID = ID[0]

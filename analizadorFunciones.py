@@ -12,6 +12,9 @@
 # -----------------------------------------------------------------------------
 
 import analizadorArbol as aA
+import analizadorVarLocales as aVL
+import analizadorParametros as aP
+import analizadorBloqueFun as aBF
 from classFunciones import *
 
 dictFunciones = {}
@@ -36,14 +39,60 @@ def an_label(hijo):
 
 def an_withParameters(withParameters):
     global tree
+    print("si entra")
     hijos = aA.gimmeTheChildren(withParameters, tree)
     parameters = hijos[0]
     hijo = hijos[1]
     value = an_label(hijo)
+    parameters = aP.init(parameters, tree)
     if(value == "funcVer1"):
         funcVer1 = hijo
+        diccionario = an_funcVer1(funcVer1)
+        variablesLocales = diccionario["varLoc"]
+        estatutos = diccionario["estatutos"]
+        diccionario = {
+            "parameters" : parameters,
+            "varLoc" : variablesLocales,
+            "estatutos" : estatutos
+        }
+        return diccionario
     else:
         funcVer2 = hijo
+        diccionario = an_funcVer2(funcVer2)
+        estatutos = diccionario["estatutos"]
+        diccionario = {
+            "parameters" : parameters,
+            "estatutos" : estatutos
+        }
+        return diccionario
+
+def an_variablesLoc(variablesLoc):
+    global tree
+    hijos = aA.gimmeTheChildren(variablesLoc, tree)
+    varAuxLoc = hijos[0]
+    dictVarLocales = aVL.init(varAuxLoc, tree)
+    return dictVarLocales
+
+def an_funcVer2(funcVer2):
+    global tree
+    hijos = aA.gimmeTheChildren(funcVer2, tree)
+    block = hijos[0]
+    estatutos = aBF.init(block, tree)
+    return {
+        "estatutos" : estatutos
+    }
+
+def an_funcVer1(funcVer1):
+    global tree
+    hijos = aA.gimmeTheChildren(funcVer1, tree)
+    variablesLoc = hijos[0]
+    block = hijos[1]
+    variablesLocales = an_variablesLoc(variablesLoc)
+    estatutos = aBF.init(block, tree)
+    return {
+        "varLoc" : variablesLocales,
+        "estatutos" : estatutos
+    }
 
 def an_funcAux(funcAux):
     global tree
@@ -56,10 +105,48 @@ def an_funcAux(funcAux):
     value = an_label(hijo)
     if(value == "withParameters"):
         withParameters = hijo
+        diccionario = an_withParameters(withParameters)
+        parametros = diccionario["parameters"]
+        variablesLocales = diccionario["varLoc"]
+        estatutos = diccionario["estatutos"]
+        if(tipo == "void"):
+            obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
+        else:
+            obj = FuncionReturn(ID, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
     elif(value == "funcVer1"):
         funcVer1 = hijo
+        diccionario = an_funcVer1(funcVer1)
+        variablesLocales = diccionario["varLoc"]
+        estatutos = diccionario["estatutos"]
+        parametros = "vacio"
+        if(tipo == "void"):
+            obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
+        else:
+            obj = FuncionReturn(ID, tipo, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
     else:
         funcVer2 = hijo
+        diccionario = an_funcVer2(funcVer2)
+        estatutos = diccionario["estatutos"]
+        variablesLocales = "vacio"
+        parametros = "vacio"
+        if(tipo == "void"):
+            obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
+        else:
+            obj = FuncionReturn(ID, tipo, parametros, variablesLocales, estatutos)
+            dictFunciones[ID] = obj
+
+def an_recursiveFunc(recursiveFunc):
+    global tree
+    hijos = aA.gimmeTheChildren(recursiveFunc, tree)
+    funcAux = hijos[0]
+    functions = hijos[1]
+    an_funcAux(funcAux)
+    an_functions(functions)
 
 def an_functions(functions):
     global tree
@@ -69,11 +156,20 @@ def an_functions(functions):
     value = aA.gimmeTheValue(label)
     if(value == "funcAux"):
         funcAux = hijo
+        an_funcAux(funcAux)
     else:
         recursiveFunc = hijo
+        an_recursiveFunc(recursiveFunc)
+
+def printInfo(dictionary):
+    keys = dictionary.keys()
+    for i in keys:
+        dictionary[i].imprimirDatos()
 
 def init(functions, lista):
     global tree
     global dictFunciones
     tree = lista
+    an_functions(functions)
+    printInfo(dictFunciones)
     return dictFunciones
