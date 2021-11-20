@@ -8,12 +8,10 @@ vars
     float: m, n;
     char: r[5];
 {
-    i = 1 + 2;
-    for i = 1 to i < 5 do {
-        h = 7 * 2;
-    }
+    j = unaFuncion(k+1, l);
 }
 main() {
-    variable1 = 1 + 2;
-    variable1 = unaFuncion();
+    if(i * j < i) then {
+        i = j * i;
+    }
 }

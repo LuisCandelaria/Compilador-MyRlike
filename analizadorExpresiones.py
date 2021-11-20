@@ -74,11 +74,16 @@ def an_constant(constant):
 def an_functionCall(functionCall):
     global tree
     global pila
-    hijos = aA.gimmeTheChildren(functionCall)
+    hijos = aA.gimmeTheChildren(functionCall, tree)
     ID = hijos[0]
+    ID = an_label(ID)
     callAux = hijos[1]
     expresiones = aLl.init(callAux, tree)
-    funcStack = ['call', ID, expresiones]
+    stack = []
+    for i in expresiones:
+        stack += [i]
+    funcStack = ['callFunction', ID] + stack
+    pila += [funcStack]
 
 def an_varianceFunc(varianceFunc):
     global tree
@@ -241,4 +246,6 @@ def init(expression, lista):
     global pila
     tree = lista
     an_expression(expression)
-    return pila
+    stack = pila
+    pila = []
+    return stack

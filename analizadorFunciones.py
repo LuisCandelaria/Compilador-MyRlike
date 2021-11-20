@@ -39,7 +39,6 @@ def an_label(hijo):
 
 def an_withParameters(withParameters):
     global tree
-    print("si entra")
     hijos = aA.gimmeTheChildren(withParameters, tree)
     parameters = hijos[0]
     hijo = hijos[1]
@@ -171,5 +170,5 @@ def init(functions, lista):
     global dictFunciones
     tree = lista
     an_functions(functions)
-    printInfo(dictFunciones)
+    #printInfo(dictFunciones)
     return dictFunciones

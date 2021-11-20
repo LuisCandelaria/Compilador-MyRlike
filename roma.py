@@ -21,11 +21,44 @@ from classVariables import *
 import analizadorArbol as aA
 import analizadorVarGlobales as aVG
 import analizadorFunciones as aF
+import analizadorBloqueFun as aBF
+import millenium as millenium
 
 dictVariablesGlobales = {}
 dictFunciones = {}
+dictEstatutos = {}
+tree = []
 
-def funciones(tree):
+def an_label(hijo):
+    global tree
+    label = aA.gimmeTheLabel(tree, hijo)
+    value  = aA.gimmeTheValue(label)
+    return value
+
+def an_principal(principal):
+    global tree
+    global dictEstatutos
+    hijos = aA.gimmeTheChildren(principal, tree)
+    block = hijos[0]
+    dictEstatutos = aBF.init(block, tree)
+
+def principal():
+    global tree
+    hijos = aA.gimmeTheChildren("3", tree)
+    label = aA.gimmeTheLabel(tree, '3')
+    value = aA.gimmeTheValue(label)
+    if(value == 'programVer1'):
+        principal = hijos[2]
+        an_principal(principal)
+    elif(value == 'programVer2'):
+        principal = hijos[1]
+        an_principal(principal)
+    else:
+        principal = hijos[0]
+        an_principal(principal)
+
+def funciones():
+    global tree
     global dictFunciones
     label = aA.gimmeTheLabel(tree, "3")
     value = aA.gimmeTheValue(label)
@@ -42,7 +75,8 @@ def funciones(tree):
             functions = hijo
             dictFunciones = aF.init(functions, tree)
 
-def variablesGlobales(tree):
+def variablesGlobales():
+    global tree
     global dictVariablesGlobales
     label = aA.gimmeTheLabel(tree, "3")
     value = aA.gimmeTheValue(label)
@@ -59,6 +93,13 @@ def variablesGlobales(tree):
             vars = hijo
             dictVariablesGlobales = aVG.init(vars, tree)
 
-def init(tree):
-    variablesGlobales(tree)
-    funciones(tree)
+def init(lista):
+    global tree
+    global dictEstatutos
+    global dictFunciones
+    global dictVariablesGlobales
+    tree = lista
+    variablesGlobales()
+    funciones()
+    principal()
+    millenium.init(dictVariablesGlobales, dictEstatutos)

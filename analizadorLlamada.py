@@ -1,5 +1,5 @@
 # -----------------------------------------------------------------------------
-# analizadorExpressiones.py
+# analizadorLlamada.py
 # Version 1.0
 #
 # Luis Eugenio Candelaria Azpilcueta
@@ -30,7 +30,7 @@ def an_callRecursive(callRecursive):
     hijos = aA.gimmeTheChildren(callRecursive, tree)
     expression = hijos[0]
     callAux = hijos[1]
-    stack = aE.init(expression)
+    stack = aE.init(expression, tree)
     pila += [stack]
     an_callAux(callAux)
 
@@ -43,6 +43,7 @@ def an_callAux(callAux):
     if(value == "expression"):
         expression = hijo
         stack = aE.init(expression, tree)
+        stack = stack
         pila += [stack]
     elif(value == "callRecursive"):
         callRecursive = hijo
@@ -53,4 +54,6 @@ def init(callAux, lista):
     global pila
     tree = lista
     an_callAux(callAux)
-    return pila
+    stack = pila
+    pila = []
+    return stack

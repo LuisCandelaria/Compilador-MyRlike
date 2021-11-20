@@ -238,5 +238,5 @@ def init(vars, lista):
     global tree
     tree = lista
     an_vars(vars)
-    printInfo(dictVariablesGlobales)
+    #printInfo(dictVariablesGlobales)
     return dictVariablesGlobales

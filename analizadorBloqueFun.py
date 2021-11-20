@@ -343,12 +343,63 @@ def an_loop(loop):
         nonconditional = hijo
         an_nonconditional(nonconditional)
 
+def an_callRecursive(callRecursive):
+    global tree
+    global pila
+    global contador
+    hijos = aA.gimmeTheChildren(callRecursive, tree)
+    expression = hijos[0]
+    callAux = hijos[1]
+    pilaExp = aE.init(expression, tree)
+    aE.pila = []
+    quads = aCE.init(pilaExp, contador)
+    aCE.pila = []
+    cuadruplos = quads[0]
+    if(len(cuadruplos) != 1):
+        pila += cuadruplos
+    IDFinal = quads[1]
+    contador = quads[2]
+    finalStack = IDFinal
+    return finalStack + an_callAux(callAux)
+
+def an_callAux(callAux):
+    global tree
+    global pila
+    global contador
+    hijos = aA.gimmeTheChildren(callAux, tree)
+    hijo = hijos[0]
+    value = an_label(hijo)
+    if(value == 'expression'):
+        expression = hijo
+        pilaExp = aE.init(expression, tree)
+        aE.pila = []
+        quads = aCE.init(pilaExp, contador)
+        aCE.pila = []
+        cuadruplos = quads[0]
+        if(len(cuadruplos) != 1):
+            pila += cuadruplos
+        IDFinal = quads[1]
+        contador = quads[2]
+        finalStack = IDFinal
+        return finalStack
+    elif(value == 'callRecursive'):
+        callRecursive = hijo
+        IDs = an_callRecursive(callRecursive)
+        finalStack = IDs
+        return finalStack
+    else:
+        return []
+
 def an_functionCall(functionCall):
     global tree
+    global pila
     hijos = aA.gimmeTheChildren(functionCall, tree)
     ID = hijos[0]
     callAux = hijos[1]
     ID = an_label(ID)
+    stack = an_callAux(callAux)
+    finalQuad = ['callFunction', ID] + stack
+    pila += [finalQuad]
 
 def an_returnStatement(returnStatement):
     global tree
@@ -358,7 +409,7 @@ def an_returnStatement(returnStatement):
     expression = hijos[0]
     pilaExp = aE.init(expression, tree)
     aE.pila = []
-    quads = aCE.init(pilaExp)
+    quads = aCE.init(pilaExp, contador)
     aCE.pila = []
     cuadruplos = quads[0]
     IDFinal = quads[1]
@@ -486,4 +537,5 @@ def init(block, lista):
     tree = lista
     an_block(block)
     diccionario = remakeStack(pila)
+    pila = []
     return diccionario

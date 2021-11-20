@@ -246,10 +246,28 @@ def insideParen(prototype):
 
 def begin(expresion):
     global pila
+    global contador
     if(len(expresion) == 1 and len(pila) == 0):
-        pila = expresion
+        if(isinstance(expresion[0], list) != True):
+            pila = expresion
+        else:
+            calling = expresion[0]
+            ID = calling[1]
+            del calling[0]
+            del calling[0]
+            for i in calling:
+                stack = begin(i)
+                newQuad = ['param', stack[0], ID]
+                pila += [newQuad]
+            temp = 't'+ str(contador)
+            newQuad = ['retrieve', ID, temp]
+            contador += 1
+            pila += [newQuad]
+            expresion = [temp]
     elif(len(expresion) == 1 and len(pila) != 0):
-        print(expresion)
+        '''
+        no se hace nada
+        '''
     elif(len(expresion) == 3):
         quad = quickGen(expresion)
         pila += [quad]

@@ -126,15 +126,15 @@ cuboSemantico = {
     '==' : {
         "int" :
         { 
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
         "float" :
         {
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
@@ -142,7 +142,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "booleano"], 
+            "char" : [True, "bool"], 
             "string" : [False]
         },
         "string" :
@@ -150,21 +150,21 @@ cuboSemantico = {
             "int" : [False], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [True, "booleano"]
+            "string" : [True, "bool"]
         }
     },
     '>' : {
         "int" :
         { 
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
         "float" :
         {
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
@@ -172,7 +172,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "booleano"], 
+            "char" : [True, "bool"], 
             "string" : [False]
         },
         "string" :
@@ -180,21 +180,21 @@ cuboSemantico = {
             "int" : [False], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [True, "booleano"]
+            "string" : [True, "bool"]
         }
     },
     '<' : {
         "int" :
         { 
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
         "float" :
         {
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
@@ -202,7 +202,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "booleano"], 
+            "char" : [True, "bool"], 
             "string" : [False]
         },
         "string" :
@@ -210,21 +210,21 @@ cuboSemantico = {
             "int" : [False], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [True, "booleano"]
+            "string" : [True, "bool"]
         }
     },
     '!=' : {
         "int" :
         { 
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
         "float" :
         {
-            "int" : [True, "booleano"], 
-            "float" : [True, "booleano"], 
+            "int" : [True, "bool"], 
+            "float" : [True, "bool"], 
             "char" : [False], 
             "string" : [False]
         },
@@ -232,7 +232,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "booleano"], 
+            "char" : [True, "bool"], 
             "string" : [False]
         },
         "string" :
@@ -240,7 +240,7 @@ cuboSemantico = {
             "int" : [False], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [True, "booleano"]
+            "string" : [True, "bool"]
         }
     },
     '=' : {
@@ -249,28 +249,32 @@ cuboSemantico = {
             "int" : [True], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [False]
+            "string" : [False],
+            "bool" : [False]
         },
         "float" :
         {
             "int" : [False], 
             "float" : [True], 
             "char" : [False], 
-            "string" : [False]
+            "string" : [False],
+            "bool" : [False]
         },
         "char" :
         {
             "int" : [False], 
             "float" : [False], 
             "char" : [True], 
-            "string" : [False]
+            "string" : [False],
+            "bool" : [False]
         },
         "string" :
         {
             "int" : [False], 
             "float" : [False], 
             "char" : [False], 
-            "string" : [True]
+            "string" : [True],
+            "bool" : [False]
         }
     }
 }
