@@ -251,19 +251,25 @@ def begin(expresion):
         if(isinstance(expresion[0], list) != True):
             pila = expresion
         else:
-            calling = expresion[0]
-            ID = calling[1]
-            del calling[0]
-            del calling[0]
-            for i in calling:
-                stack = begin(i)
-                newQuad = ['param', stack[0], ID]
+            if(expresion[0][0] != 'average' and expresion[0][0] != 'mode' and expresion[0][0] != 'variance'):
+                calling = expresion[0]
+                ID = calling[1]
+                del calling[0]
+                del calling[0]
+                for i in calling:
+                    stack = begin(i)
+                    newQuad = ['param', stack[0], ID]
+                    pila += [newQuad]
+                temp = 't'+ str(contador)
+                newQuad = ['retrieve', ID, temp]
+                contador += 1
                 pila += [newQuad]
-            temp = 't'+ str(contador)
-            newQuad = ['retrieve', ID, temp]
-            contador += 1
-            pila += [newQuad]
-            expresion = [temp]
+                expresion = [temp]
+            else:
+                expresion[0] = expresion[0] + ['t' + str(contador)]
+                contador += 1
+                pila = expresion
+                return pila
     elif(len(expresion) == 1 and len(pila) != 0):
         '''
         no se hace nada
@@ -352,5 +358,15 @@ def init(expresion, cont):
     global pila
     global contador
     contador = cont
+    eraQuad = []
+    try:
+        if(expresion[0][0] == 'era'):
+            eraQuad = expresion[0]
+            del expresion[0]
+            pila += [aQuad]
+            contador += 1
+    except:
+        do = "nothing"
     expresion = begin(expresion)
+    pila = [eraQuad] + pila
     return [pila, expresion, contador]

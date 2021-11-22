@@ -72,6 +72,12 @@ def an_assignment(assignment):
     aCE.pila = []
     cuadruplos = quads[0]
     IDFinal = quads[1]
+    if(isinstance(IDFinal, list)):
+        if(len(IDFinal) == 1):
+            IDFinal = IDFinal
+        else:
+            IDFinal = IDFinal[0][2]
+            IDFinal = [IDFinal]
     contador = quads[2]
     pila += cuadruplos
     finalQuad = ['='] + ID + IDFinal
@@ -157,7 +163,7 @@ def an_writingFinal(writingFinal):
         contador = quads[2]
         pila += cuadruplos
         finalQuad = ['writeExp'] + IDFinal
-        pila += finalQuad
+        pila += [finalQuad]
 
 def an_writingRecursive(writingRecursive):
     global tree
@@ -185,7 +191,7 @@ def an_writingRecursive(writingRecursive):
         contador = quads[2]
         pila += cuadruplos
         finalQuad = ['writeExp'] + IDFinal
-        pila += finalQuad
+        pila += [finalQuad]
     if(value2 == "writingFinal"):
         writingFinal = hijo2
         an_writingFinal(writingFinal)
@@ -352,7 +358,7 @@ def an_callRecursive(callRecursive):
     callAux = hijos[1]
     pilaExp = aE.init(expression, tree)
     aE.pila = []
-    quads = aCE.init(pilaExp, contador)
+    quads = aCE.init(pilaExp[0], contador)
     aCE.pila = []
     cuadruplos = quads[0]
     if(len(cuadruplos) != 1):
@@ -376,7 +382,7 @@ def an_callAux(callAux):
         quads = aCE.init(pilaExp, contador)
         aCE.pila = []
         cuadruplos = quads[0]
-        if(len(cuadruplos) != 1):
+        if(len(cuadruplos[0]) != 1):
             pila += cuadruplos
         IDFinal = quads[1]
         contador = quads[2]
@@ -393,13 +399,27 @@ def an_callAux(callAux):
 def an_functionCall(functionCall):
     global tree
     global pila
-    hijos = aA.gimmeTheChildren(functionCall, tree)
-    ID = hijos[0]
-    callAux = hijos[1]
-    ID = an_label(ID)
-    stack = an_callAux(callAux)
-    finalQuad = ['callFunction', ID] + stack
-    pila += [finalQuad]
+    global contador
+    aE.tree = tree
+    aE.an_functionCall(functionCall)
+    unaPila = aE.pila
+    aE.pila = []
+    quads = aCE.init(unaPila, contador)
+    aCE.pila = []
+    quads = quads[0]
+    if(len(quads) == 1):
+        quads[0][0] = 'callFunction'
+        del quads[0][len(quads[0])-1]
+    else:
+        del quads[0]
+        quads[len(quads)-1][0] = 'callFunction'
+    del quads[-1][-1]
+    lastQuad = quads[-1]
+    print(lastQuad)
+    ID = lastQuad[1]
+    era = ['era', ID]
+    quads = [era] + quads
+    pila += quads
 
 def an_returnStatement(returnStatement):
     global tree
@@ -494,41 +514,44 @@ def remakeStack(pila):
     jumps = []
     for index in range(len(pila)):
         quad = pila[index]
-        inst = quad[0]
-        if(inst == 'GotoF'):
-            pending = [contador] + pending
-        if(inst == 'EndOfIf'):
-            jumps = jumps + [contador + 1]
-            pend = pending.pop()
-            prevQuad = diccionario[pend]
-            jumpTo = jumps.pop()
-            prevQuad += [jumpTo]
-            diccionario[pend] = prevQuad
-        if(inst == 'BeginElse'):
-            jumps = jumps + [contador + 1]
-            pend = pending.pop()
-            prevQuad = diccionario[pend]
-            jumpTo = jumps.pop()
-            prevQuad += [jumpTo]
-            diccionario[pend] = prevQuad
-        if(inst == 'GotoT'):
-            pending = [contador] + pending
-        if(inst == 'StartLoop'):
-            jumps = jumps + [contador + 1]
-        if(inst == 'EndOfLoop'):
-            jumps = jumps + [contador + 1]
-            pend = pending.pop()
-            prevQuad = diccionario[pend]
-            jumpTo = jumps.pop()
-            prevQuad += [jumpTo]
-            diccionario[pend] = prevQuad
-            pend = pending.pop()
-            prevQuad = diccionario[pend]
-            jumpTo = jumps.pop()
-            prevQuad += [jumpTo]
-            diccionario[pend] = prevQuad
-        diccionario[contador] = quad
-        contador += 1
+        if(len(quad) == 0):
+            ignore = ''
+        else:
+            inst = quad[0]
+            if(inst == 'GotoF'):
+                pending = [contador] + pending
+            if(inst == 'EndOfIf'):
+                jumps = jumps + [contador + 1]
+                pend = pending.pop()
+                prevQuad = diccionario[pend]
+                jumpTo = jumps.pop()
+                prevQuad += [jumpTo]
+                diccionario[pend] = prevQuad
+            if(inst == 'BeginElse'):
+                jumps = jumps + [contador + 1]
+                pend = pending.pop()
+                prevQuad = diccionario[pend]
+                jumpTo = jumps.pop()
+                prevQuad += [jumpTo]
+                diccionario[pend] = prevQuad
+            if(inst == 'GotoT'):
+                pending = [contador] + pending
+            if(inst == 'StartLoop'):
+                jumps = jumps + [contador + 1]
+            if(inst == 'EndOfLoop'):
+                jumps = jumps + [contador + 1]
+                pend = pending.pop()
+                prevQuad = diccionario[pend]
+                jumpTo = jumps.pop()
+                prevQuad += [jumpTo]
+                diccionario[pend] = prevQuad
+                pend = pending.pop()
+                prevQuad = diccionario[pend]
+                jumpTo = jumps.pop()
+                prevQuad += [jumpTo]
+                diccionario[pend] = prevQuad
+            diccionario[contador] = quad
+            contador += 1
     return diccionario
 
 def init(block, lista):

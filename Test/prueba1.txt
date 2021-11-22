@@ -2,16 +2,16 @@ program pruebaNueva;
 vars
     int: i, j, k[100];
     float: p, q;
-function void idFunction(int: f, z, ww; float: g, t; char: w, hh)
+function void idFunction(int: f, z)
 vars
     int: h;
     float: m, n;
     char: r[5];
 {
-    j = unaFuncion(k+1, l);
+    h = i + 1;
+    m = n + m;
 }
 main() {
-    if(i * j < i) then {
-        i = j * i;
-    }
+    regression(k, k);
+    idFunction(i, j);
 }

@@ -276,5 +276,89 @@ cuboSemantico = {
             "string" : [True],
             "bool" : [False]
         }
+    },
+    '&' : {
+        'bool' :
+        {
+            'bool' : [True, 'bool'],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'int' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'float' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'char' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'string' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        }
+    },
+    '|' : {
+        'bool' :
+        {
+            'bool' : [True, 'bool'],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'int' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'float' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'char' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        },
+        'string' :
+        {
+            'bool' : [False],
+            'int' : [False],
+            'float' : [False],
+            'char' : [False],
+            'string' : [False]
+        }
     }
 }

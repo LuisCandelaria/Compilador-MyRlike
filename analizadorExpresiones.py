@@ -83,7 +83,8 @@ def an_functionCall(functionCall):
     for i in expresiones:
         stack += [i]
     funcStack = ['callFunction', ID] + stack
-    pila += [funcStack]
+    era = ['era', ID]
+    pila += [era] + [funcStack]
 
 def an_varianceFunc(varianceFunc):
     global tree
