@@ -27,6 +27,9 @@ class FuncionReturn():
         print(self.parametros)
         print(self.variablesLocales)
         print(self.estatutos)
+    
+    def setAddress(self, address):
+        self.address = address
 
 class FunctionVoid():
     especie = "Void"
@@ -41,4 +44,6 @@ class FunctionVoid():
         print(self.parametros)
         print(self.variablesLocales)
         print(self.estatutos)
-
+    
+    def setAddress(self, address):
+        self.address = address

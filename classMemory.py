@@ -44,10 +44,13 @@ class StackMemory():
             return [inicio, self.contador]
 
     def assignRegularSpace(self):
+        if(self.contador >= self.DirLimite):
+            print("Stack overflow")
+            sys.exit()
         address = self.contador
         self.Stack[self.contador - self.DirInicio] = 0
         self.contador += 1
-        return self.contador
+        return address
     
     def getValue(self, address):
         if(address < self.DirInicio or address > self.DirLimite):

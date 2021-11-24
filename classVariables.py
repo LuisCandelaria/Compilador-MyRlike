@@ -65,3 +65,6 @@ class VariableArreglo():
     
     def getValueIndex(self, indice):
         return self.valor[indice]
+    
+    def asignarDireccion(self, direccion):
+        self.address = direccion

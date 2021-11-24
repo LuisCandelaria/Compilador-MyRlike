@@ -285,72 +285,78 @@ def begin(expresion):
     else:
         data1 = expresion[0]
         second = expresion[1]
-        if(second != '-[-'):
-            operador = expresion[1]
-            data2 = expresion[2]
-            if(data2 != '('):
-                operador2 = expresion[3]
-                if(operador2 != '-[-'):
-                    priority1 = assignPriority(operador)
-                    priority2 = assignPriority(operador2)
-                    if(priority1 <= priority2):
-                        stack = [data1, operador, data2]
-                        del expresion[0]
-                        del expresion[0]
-                        quad = quickGen(stack)
-                        expresion[0] = quad[-1]
-                        pila += [quad]
-                        expresion = begin(expresion)
-                    else:
-                        data3 = expresion[4]
-                        if(data3 != '('):
-                            stack = [data2, operador2, data3]
-                            del expresion[2]
-                            del expresion[2]
+        if(data1 != '('):
+            if(second != '-[-'):
+                operador = expresion[1]
+                data2 = expresion[2]
+                if(data2 != '('):
+                    operador2 = expresion[3]
+                    if(operador2 != '-[-'):
+                        priority1 = assignPriority(operador)
+                        priority2 = assignPriority(operador2)
+                        if(priority1 <= priority2):
+                            stack = [data1, operador, data2]
+                            del expresion[0]
+                            del expresion[0]
                             quad = quickGen(stack)
-                            expresion[2] = quad[-1]
+                            expresion[0] = quad[-1]
                             pila += [quad]
                             expresion = begin(expresion)
                         else:
-                            stack = [data1, operador, data2, operador2]
-                            prototype = expression
-                            del prototype[0]
-                            del prototype[0]
-                            del prototype[0]
-                            del prototype[0]
-                            del prototype[0]
-                            expresion = insideParen(prototype)
-                            expresion = stack + expresion
-                            expresion = begin(expresion)
+                            data3 = expresion[4]
+                            if(data3 != '('):
+                                stack = [data2, operador2, data3]
+                                del expresion[2]
+                                del expresion[2]
+                                quad = quickGen(stack)
+                                expresion[2] = quad[-1]
+                                pila += [quad]
+                                expresion = begin(expresion)
+                            else:
+                                stack = [data1, operador, data2, operador2]
+                                prototype = expression
+                                del prototype[0]
+                                del prototype[0]
+                                del prototype[0]
+                                del prototype[0]
+                                del prototype[0]
+                                expresion = insideParen(prototype)
+                                expresion = stack + expresion
+                                expresion = begin(expresion)
+                    else:
+                        stack = [data1, operador]
+                        del expresion[0]
+                        del expresion[0]
+                        del expresion[0]
+                        del expresion[0]
+                        expresion = insideBrackets(expresion)
+                        last = pila[-1]
+                        temp = last[-1]
+                        salida = data2 + '[' + temp + ']'
+                        expresion = stack + [salida] + expresion
+                        expresion = begin(expresion)
                 else:
                     stack = [data1, operador]
-                    del expresion[0]
-                    del expresion[0]
-                    del expresion[0]
-                    del expresion[0]
-                    expresion = insideBrackets(expresion)
-                    last = pila[-1]
-                    temp = last[-1]
-                    salida = data2 + '[' + temp + ']'
-                    expresion = stack + [salida] + expresion
+                    prototype = expresion
+                    del prototype[0]
+                    del prototype[0]
+                    del prototype[0]
+                    expresion = insideParen(prototype)
+                    expresion = stack + expresion
                     expresion = begin(expresion)
             else:
-                stack = [data1, operador]
-                prototype = expresion
-                del prototype[0]
-                del prototype[0]
-                del prototype[0]
-                expresion = insideParen(prototype)
-                expresion = stack + expresion
+                del expresion[0]
+                del expresion[0]
+                expresion = insideBrackets(expresion)
+                last = pila[-1]
+                temp = last[-1]
+                salida = data1 + '[' + temp + ']'
+                expresion = [salida] + expresion
                 expresion = begin(expresion)
         else:
-            del expresion[0]
-            del expresion[0]
-            expresion = insideBrackets(expresion)
-            last = pila[-1]
-            temp = last[-1]
-            salida = data1 + '[' + temp + ']'
-            expresion = [salida] + expresion
+            prototype = expresion
+            del prototype[0]
+            expresion = insideParen(prototype)
             expresion = begin(expresion)
     return expresion
 

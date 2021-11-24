@@ -132,7 +132,7 @@ def an_parametro(quad, i, IDparametros, contParametro):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
             tipoFirst = dictionaryVarG[ID].tipo
-            quad[1] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -191,6 +191,13 @@ def an_era(quad, i):
             return i
         elif(inst == 'retrieve'):
             if(obj.especie == "Retorno"):
+                functionSt = obj.estatutos
+                keysFuncSt = functionSt.keys()
+                lastKeyFuncSt = keysFuncSt[-1]
+                lastQuadFuncSt = functionSt[lastKeyFuncSt]
+                if(lastQuadFuncSt[0] != 'return'):
+                    print("La función no tiene un estatuto de retorno al final")
+                    sys.exit()
                 stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, i, direcciones)
                 dictionaryStatutes = stack[1]
                 i = stack[0]
@@ -211,13 +218,13 @@ def an_modeFunc(quad, i):
     tipoFirst = ''
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDs):
-            keysMemory = dictionaryAddress.keys()
-            address = dictionaryAddress[first]
-            quad[1] = str(address[0]) + 'ç'
-            tipoFirst = dictionaryVarG[first].tipo
             if(dictionaryVarG[first].especie != "Arreglo"):
                 print("Debe ser un arreglo")
                 sys.exit()
+            keysMemory = dictionaryAddress.keys()
+            address = dictionaryAddress[first]
+            quad[1] = str(address[0]) + '-' + str(address[1]) + 'ç'
+            tipoFirst = dictionaryVarG[first].tipo
         elif(first[0] == '\''):
             print("Imposible")
             sys.exit()
@@ -251,12 +258,12 @@ def an_specialFunc(quad, i):
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDs):
             keysMemory = dictionaryAddress.keys()
-            address = dictionaryAddress[first]
-            quad[1] = str(address[0]) + 'ç'
-            tipoFirst = dictionaryVarG[first].tipo
             if(dictionaryVarG[first].especie != "Arreglo"):
                 print("Debe ser un arreglo")
                 sys.exit()
+            address = dictionaryAddress[first]
+            quad[1] = str(address[0]) + '-' + str(address[1]) + 'ç'
+            tipoFirst = dictionaryVarG[first].tipo
         elif(first[0] == '\''):
             print("Imposible")
             sys.exit()
@@ -316,7 +323,7 @@ def an_read(quad, i):
         if(especie == "Arreglo"):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
-            quad[1] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -364,7 +371,7 @@ def an_writeExpression(quad, i):
         if(especie == "Arreglo"):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
-            quad[1] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -392,7 +399,7 @@ def an_regression(quad, i):
                 sys.exit()
             keysMemory = dictionaryAddress.keys()
             address = dictionaryAddress[first]
-            quad[1] = str(address[0]) + 'ç'
+            quad[1] = str(address[0]) + '-' + str(address[1]) + 'ç'
             tipoFirst = dictionaryVarG[first].tipo
         elif(first[0] == '\''):
             print("Imposible")
@@ -424,7 +431,7 @@ def an_regression(quad, i):
                 sys.exit()
             keysMemory = dictionaryAddress.keys()
             address = dictionaryAddress[second]
-            quad[2] = str(address[0]) + 'ç'
+            quad[2] = str(address[0]) + '-' + str(address[1]) + 'ç'
             tipoSecond = dictionaryVarG[second].tipo
         elif(len(second) == 1 and second.isnumeric() == False):
             print("Imposible")
@@ -533,7 +540,7 @@ def an_equalExpression(quad, i):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
             tipoFirst = dictionaryVarG[ID].tipo
-            quad[1] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -583,7 +590,7 @@ def an_equalExpression(quad, i):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
             tipoSecond = dictionaryVarG[ID].tipo
-            quad[2] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[2] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -650,7 +657,7 @@ def an_regularExpression(quad, i):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
             tipoFirst = dictionaryVarG[ID].tipo
-            quad[1] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:
@@ -700,7 +707,7 @@ def an_regularExpression(quad, i):
             addressID = dictionaryAddress[ID]
             addresstemp = dictionaryAddressTemp[index]
             tipoSecond = dictionaryVarG[ID].tipo
-            quad[2] = str(addressID[0]) + '[' + str(addresstemp) + ']' + 'ç'
+            quad[2] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
             if(addresstemp >= 1000 and addresstemp < 2000):
                 tipoTemp = '''tipoFirst = 'int'''
             else:

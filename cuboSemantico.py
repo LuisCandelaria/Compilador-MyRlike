@@ -172,7 +172,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "bool"], 
+            "char" : [False], 
             "string" : [False]
         },
         "string" :
@@ -202,7 +202,7 @@ cuboSemantico = {
         {
             "int" : [False], 
             "float" : [False], 
-            "char" : [True, "bool"], 
+            "char" : [False], 
             "string" : [False]
         },
         "string" :
