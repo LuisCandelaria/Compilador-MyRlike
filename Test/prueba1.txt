@@ -36,8 +36,8 @@ main() {
 
     for i = 1 to i < 9 do {
         arreglo[i] = p + i;
-    }
-    
+    } 
+     
     p = average(arreglo);
     while(i > 0) {
         calcula(p - i);

@@ -6,8 +6,15 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo resuelve lo que tiene un cuádruplo, regresa el mapa de memoria
+# virtual con los valores o el índice cambiados
 #
 # Indice:
+# 1. Imports
+# 2. Variables globales
+# 3. Función auxiliar
+# 4. Versiones de solución
+# 5. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -29,6 +36,7 @@ inicioTempBool = 4000
 
 waitingForReturn = []
 
+# Función que regresa que tipo de Stack debe buscarse (de acuerdo a la dirección)
 def verifyAddress(address):
     global inicioInt
     global inicioTempInt
@@ -53,6 +61,7 @@ def verifyAddress(address):
     else:
         return 'tempBool'
 
+# Solución al retorno
 def an_return(quad, i):
     global memoryMap
     global waitingForReturn
@@ -95,6 +104,7 @@ def an_return(quad, i):
 
     return i
 
+# Solución al esperar un retorno, este agrega a una pila de espera al temporal que requiere un return
 def an_retrieve(quad, i):
     global memoryMap
     global waitingForReturn
@@ -129,6 +139,7 @@ def an_retrieve(quad, i):
 
     return i
 
+# Solución a la regresión
 def an_regression(quad, i):
     global memoryMap
     first = quad[1]
@@ -172,6 +183,7 @@ def an_regression(quad, i):
     plt.show()
     return i+1
 
+# Solución al gráfico de dos arreglos
 def an_plot(quad, i):
     global memoryMap
     first = quad[1]
@@ -211,10 +223,12 @@ def an_plot(quad, i):
     plt.show()
     return i
 
+# Regresa la moda de una lista
 def calculateMode(stack):
     mode = mode(stack)
     return mode
 
+# Solución a la moda
 def an_mode(quad, i):
     global memoryMap
     first = quad[1]
@@ -247,10 +261,12 @@ def an_mode(quad, i):
     memoryMap[keyStackSecond].setValue(addressSecond, mode)
     return i
 
+# Regresa la varianza de una lista
 def calculateVariance(stack):
     variance = np.var(stack)
     return variance
 
+# Solución a la varianza
 def an_variance(quad, i):
     global memoryMap
     first = quad[1]
@@ -283,6 +299,7 @@ def an_variance(quad, i):
     memoryMap[keyStackSecond].setValue(addressSecond, variance)
     return i
 
+# Regresa el promedio de una lista
 def calculateAvg(stack, size):
     acum = 0
     for h in stack:
@@ -291,6 +308,7 @@ def calculateAvg(stack, size):
     avg = acum / size
     return avg
 
+# Solución al promedio
 def an_average(quad, i):
     global memoryMap
     first = quad[1]
@@ -323,6 +341,7 @@ def an_average(quad, i):
     memoryMap[keyStackSecond].setValue(addressSecond, average)
     return i
 
+# Solución a la lectura
 def an_read(quad, i):
     global memoryMap
     first = quad[1]
@@ -364,11 +383,13 @@ def an_read(quad, i):
     
     return i
 
+# Solución a la escritura de un string
 def an_writeStr(quad, i):
     global memoryMap
     first = quad[1]
     return i+1
 
+# Solución a la escritura de una expresión (es el temporal de dicha expresión)
 def an_write(quad, i):
     global memoryMap
     first = quad[1]
@@ -409,10 +430,12 @@ def an_write(quad, i):
 
     return i
 
+# Cambio de índice para el diccionario de cuádruplos
 def an_GotoT(quad, i):
     i = int(quad[1])
     return i
 
+# Solución al salto en falso
 def an_GotoF(quad, i):
     global memoryMap
     first = quad[1]
@@ -440,6 +463,7 @@ def an_GotoF(quad, i):
         i = second
     return i
 
+# Solución a la asignación
 def an_assignment(quad, i):
     global memoryMap
     first = quad[1]
@@ -478,7 +502,7 @@ def an_assignment(quad, i):
         keyStackSecond = verifyAddress(addressSecond)
         valueSecond = memoryMap[keyStackSecond].getValue(addressSecond)
     else:
-        valueSecond = second
+        valueSecond = int(second)
 
     if(isinstance(first, str)):
         lastCharacter = first[-1]
@@ -509,6 +533,7 @@ def an_assignment(quad, i):
     memoryMap[keyStackFirst].setValue(addressFirst,  valueSecond)
     return i
 
+# Solución a una expresión
 def an_expression(quad, i):
     global memoryMap
     operator = quad[0]
@@ -617,9 +642,11 @@ def an_expression(quad, i):
     memoryMap[keyStackThird].setValue(addressThird,  valueThird)
     return i
 
+# Caso de error, solo regresa el índice, hay casos que el cuádruplo está vacío o contiene información basura
 def error(quad, i):
     return i
 
+# Función que tiene el switch para el tipo de solución
 def switchQuad(estatuto, i):
     global memoryMap
     quad = estatuto
@@ -652,6 +679,7 @@ def switchQuad(estatuto, i):
     i = switch_statute.get(operator, error)(quad, i)
     return i
 
+# Función inicial que recibe el cuádruplo, el mapa de memoria virtual y el índice; regresa los últimos dos (por cambios)
 def init(estatuto, memoriaVirtual, i):
     global memoryMap
     memoryMap = memoriaVirtual

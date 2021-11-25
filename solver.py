@@ -6,11 +6,15 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo resuelve una expresión que específicamente busca obtener el tamaño
+# de un arreglo
 #
 # Indice:
+# 1. Análisis de expresión
 #
 # -----------------------------------------------------------------------------
 
+# Función que resuelve una expresión
 def resolve(first, operator, second):
     first = int(first)
     second = int(second)
@@ -25,6 +29,7 @@ def resolve(first, operator, second):
         result = first - second
     return result
 
+# Función que resuelve toda una pila (debe ser corta)
 def fastResolve(pila):
     first = int(pila[0])
     operator = pila[1]
@@ -40,6 +45,7 @@ def fastResolve(pila):
         result = first - second
     return result
 
+# Función que checa la prioridad de los operadores
 def checkPriority(operator, nextOperator):
     if(operator == '*' or operator == '/'):
         return True
@@ -49,6 +55,7 @@ def checkPriority(operator, nextOperator):
         else:
             return False
 
+# Función que inicia la solución de una expresión
 def solve(pila):
     if(len(pila) == 1):
         return int(pila[0])
@@ -74,6 +81,8 @@ def solve(pila):
             pila[2] = result
             return solve(pila)
 
+# Función inicial que recibe una pila representante de la expresión y regresa un valor entero
+# que represeenta el tamaño de una arreglo
 def init(pila):
     result = solve(pila)
     if(isinstance(result, int)):

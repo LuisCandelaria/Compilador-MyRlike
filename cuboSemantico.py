@@ -6,6 +6,11 @@
 # A00816826
 # -------------------------------------
 
+# El siguiente "cubo" es un diccionario con diccionarios dentro, para pdoer accesar rápidamente
+# si una operación es válida. Ej. se tiene la operación [1 + 2], se checa cubo[+][entero][entero]
+# esto regresa una lista, el primer valor nos dice si la operación es válida, el segundo qué
+# tipo de resultado de obtiene
+
 cuboSemantico = {
     '+' : {
         "int" : { 

@@ -6,8 +6,15 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo analiza las variables locales de una función y las agrega a un
+# diccionario para posteriormente regresarlo a la función que llamó a este
+# archivo.
 #
 # Indice:
+# 1. Imports
+# 2. Funciones auxiliares
+# 3. Funciones analizadoras del árbol semántico
+# 4. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -19,6 +26,7 @@ import sys
 dictVariablesLocales = {}
 tree = []
 
+# Función que verifica si el ID se repite en el diccionario
 def IDinDict(ID):
     global dictVariablesLocales
     keys = dictVariablesLocales.keys()
@@ -30,12 +38,14 @@ def IDinDict(ID):
     except:
         return False
 
+# Función que regresa el valor de una etiqueta
 def an_label(hijo):
     global tree
     label = aA.gimmeTheLabel(tree, hijo)
     value  = aA.gimmeTheValue(label)
     return value
 
+# Función que crea variables a partir de una lista
 def createVarFromList(IDs, tipo):
     global tree
     global dictVariablesLocales
@@ -66,6 +76,7 @@ def createVarFromList(IDs, tipo):
                 obj = VariableComun(ID, tipo)
                 dictVariablesLocales[ID] = obj
 
+# Función que crea una variable
 def createVar(ID, tipo):
     global tree
     global dictVariablesLocales
@@ -96,6 +107,7 @@ def createVar(ID, tipo):
             obj = VariableComun(ID, tipo)
             dictVariablesLocales[ID] = obj
 
+# Función que analiza la regla identLonely
 def an_identLonely(identLonely):
     global tree
     hijos = aA.gimmeTheChildren(identLonely, tree)
@@ -103,6 +115,7 @@ def an_identLonely(identLonely):
     ID = an_label(ID)
     return [ID]
 
+# Función que analiza la regla identArray
 def an_identArray(identArray):
     global tree
     hijos = aA.gimmeTheChildren(identArray, tree)
@@ -111,6 +124,7 @@ def an_identArray(identArray):
     ID = an_label(ID)
     return [[ID, expression]]
 
+# Función que analiza la regla identifier
 def an_identifier(identifier):
     global tree
     hijos = aA.gimmeTheChildren(identifier, tree)
@@ -126,6 +140,7 @@ def an_identifier(identifier):
         ID = an_identArray(identArray)
         return ID
 
+# Función que analiza la regla oneVarLoc
 def an_oneVarLoc(oneVarLoc):
     global tree
     hijos = aA.gimmeTheChildren(oneVarLoc, tree)
@@ -135,6 +150,7 @@ def an_oneVarLoc(oneVarLoc):
     ID = an_identifier(identifier)
     createVar(ID, tipo)
 
+# Función que analiza la regla newTypeLoc
 def an_newTypeLoc(newTypeLoc):
     global tree
     hijos = aA.gimmeTheChildren(newTypeLoc, tree)
@@ -146,6 +162,7 @@ def an_newTypeLoc(newTypeLoc):
     createVar(ID, tipo)
     an_varAuxLoc(varAuxLoc)
 
+# Función que analiza la regla sameTypeFinalLoc
 def an_sameTypeFinalLoc(sameTypeFinalLoc):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeFinalLoc, tree)
@@ -153,6 +170,7 @@ def an_sameTypeFinalLoc(sameTypeFinalLoc):
     ID = an_identifier(identifier)
     return ID
 
+# Función que analiza la regla sameTypeRecursiveLoc
 def an_sameTypeRecursiveLoc(sameTypeRecursiveLoc):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeRecursiveLoc, tree)
@@ -172,6 +190,7 @@ def an_sameTypeRecursiveLoc(sameTypeRecursiveLoc):
         an_varAuxLoc(varAuxLoc)
         return ID
 
+# Función que analiza la regla sameTypeLoc
 def an_sameTypeLoc(sameTypeLoc):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeLoc, tree)
@@ -191,6 +210,7 @@ def an_sameTypeLoc(sameTypeLoc):
         arr += an_sameTypeRecursiveLoc(sameTypeRecursiveLoc)
     createVarFromList(arr, tipo)
 
+# Función que analiza la regla varAuxLoc
 def an_varAuxLoc(varAuxLoc):
     global tree
     hijos = aA.gimmeTheChildren(varAuxLoc, tree)
@@ -207,6 +227,7 @@ def an_varAuxLoc(varAuxLoc):
         newTypeLoc = hijo
         an_newTypeLoc(newTypeLoc)
 
+# Función inicial que recibe el nodo varAuxLoc y regresa un diccionario de variables
 def init(varAuxLoc, lista):
     global tree
     global dictVariablesLocales

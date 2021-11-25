@@ -6,8 +6,12 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo contiene las clases para la memoria virtual, eso incluyen funciones
+# de manejo de direcciones (busqueda de valor y asignación)
 #
 # Indice:
+# 1. Import
+# 2. Clase para el "stack" de memoria virtual
 #
 # -----------------------------------------------------------------------------
 

@@ -30,12 +30,14 @@ dictFunciones = {}
 dictEstatutos = {}
 tree = []
 
+# Función que analiza el valor de una etiqueta
 def an_label(hijo):
     global tree
     label = aA.gimmeTheLabel(tree, hijo)
     value  = aA.gimmeTheValue(label)
     return value
 
+# Función que analiza la regla: principal
 def an_principal(principal):
     global tree
     global dictEstatutos
@@ -43,6 +45,7 @@ def an_principal(principal):
     block = hijos[0]
     dictEstatutos = aBF.init(block, tree)
 
+# Función principal que reparte los caminos, ya sea si se necesita buscar variables globales, funciones, etc.
 def principal():
     global tree
     hijos = aA.gimmeTheChildren("3", tree)
@@ -58,6 +61,7 @@ def principal():
         principal = hijos[0]
         an_principal(principal)
 
+# Función que inicia el análisis de funciones
 def funciones():
     global tree
     global dictFunciones
@@ -76,6 +80,7 @@ def funciones():
             functions = hijo
             dictFunciones = aF.init(functions, tree)
 
+# Función que inicia el análisis de variables globales
 def variablesGlobales():
     global tree
     global dictVariablesGlobales
@@ -94,6 +99,7 @@ def variablesGlobales():
             vars = hijo
             dictVariablesGlobales = aVG.init(vars, tree)
 
+# Función inicial que recibe el árbol semántico y comienza la creación de todo el análisis
 def init(lista):
     global tree
     global dictEstatutos

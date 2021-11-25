@@ -6,8 +6,18 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo es el inicio de la máquina virtual, se encarga de reemplazar
+# todos los IDs y temporales por direcciones de memoria, solo funciona para
+# el bloque del programa principal, si aparece una llamada se llama a otro
+# archivo.
 #
 # Indice:
+# 1. Imports
+# 2. Variables globales
+# 3. Asignación de espacio a variable temporal y parámetros de una función
+# 4. Análisis de los estatutos
+# 5. Asignación de espacio en la memoria a las variables globales
+# 6. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -18,6 +28,7 @@ from cuboSemantico import cuboSemantico
 import severen as severen
 import mountDoom as mD
 
+# Variables globales, diccionarios, direcciones y tamaños
 memoryMap = {}
 dictionaryVarG = {}
 dictionaryStatutes = {}
@@ -37,6 +48,7 @@ inicioTempChar = 3000
 sizeBool = 500
 inicioTempBool = 4000
 
+# Asigna espacio en la memoria a un parámetro de una función
 def asignarEspacioParametro(IDParametro, tipo):
     global memoryMap
     address = ''
@@ -52,6 +64,7 @@ def asignarEspacioParametro(IDParametro, tipo):
     stack = [IDParametro, address]
     return stack
 
+# Asigna espacio en la memoria a un temporal
 def asignarEspacioTemporal(ID, tipo):
     global dictionaryAddressTemp
     global memoryMap
@@ -66,11 +79,13 @@ def asignarEspacioTemporal(ID, tipo):
         address = memoryMap['tempBool'].assignRegularSpace()
     dictionaryAddressTemp[ID] = address
 
+# Verifica si el parámetro y el temporal que se le asigna son del mismo tipo
 def isItValid(typeParameter, typeData):
     if(typeParameter != typeData):
         print("Los parametros no coinciden")
         sys.exit()
 
+# Analiza el cuádruplo para parámetros
 def an_parametro(quad, i, IDparametros, contParametro):
     global dictionaryVarG
     global memoryMap
@@ -155,6 +170,8 @@ def an_parametro(quad, i, IDparametros, contParametro):
     quad += [True]
     return stack
 
+# Analiza el cuádruplo 'era', este continua con el conteo de estatutos hasta llegar a la llamada de la función
+# ya que un parámetro puede ser igual al resultado de una o más expresiones, osea, más estatutos
 def an_era(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -232,6 +249,7 @@ def an_era(quad, i):
         i += 1
         flag = (inst == 'callFunction' or inst == 'retrieve')
 
+# Analiza el cuádruplo para moda
 def an_modeFunc(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -274,6 +292,7 @@ def an_modeFunc(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para media y varianza
 def an_specialFunc(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -320,6 +339,7 @@ def an_specialFunc(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para lectura
 def an_read(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -367,6 +387,7 @@ def an_read(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para escritura de una expresion
 def an_writeExpression(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -418,6 +439,7 @@ def an_writeExpression(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para regresion
 def an_regression(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -500,6 +522,7 @@ def an_regression(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para un cuádruplo de salto en falso
 def an_jumpFalse(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -543,6 +566,7 @@ def an_jumpFalse(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para asignación
 def an_equalExpression(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -673,6 +697,7 @@ def an_equalExpression(quad, i):
     quad += [True]       
     dictionaryStatutes[i] = quad
 
+# Analiza el cuádruplo para una operación, suma, resta, etc.
 def an_regularExpression(quad, i):
     global dictionaryVarG
     global memoryMap
@@ -799,6 +824,7 @@ def an_regularExpression(quad, i):
     quad += [True]
     dictionaryStatutes[i] = quad
 
+# Función que contiene el switch de los tipos de cuádruplos
 def changeQuads(quad, i):
     global dictionaryStatutes
     global dictionaryVarG
@@ -829,6 +855,7 @@ def changeQuads(quad, i):
         keys = dictionaryStatutes.keys()
     return i
 
+# Función que asigna espacio en la memoria virtual a las variables globales
 def asignacionEspacio():
     global dictionaryVarG
     global memoryMap
@@ -846,6 +873,9 @@ def asignacionEspacio():
             address = memoryMap['globalChar'].assignSpace(obj)
         dictionaryAddress[obj.ID] = address
 
+# Función inicial que recibe las variables globales, estatutos y funciones, crea la memoria virtual e
+# inicia el análisis para asignar espacios de memoria a las variables y temporales, reescribiendo
+# los cuádruplos
 def init(dictVarGlob, dictEstatutos, dictFunciones):
     global memoryMap
     global sizeInt

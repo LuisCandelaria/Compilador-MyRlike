@@ -11,6 +11,9 @@
 # y se anexarán al diccionario de variables globales.
 #
 # Indice:
+# 1. Imports
+# 2. Funciones que analizadoras del árbol semántico
+# 3. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -22,6 +25,7 @@ import sys
 dictVariablesGlobales = {}
 tree = []
 
+# Función que analiza la regla identLonely
 def an_identLonely(identLonely):
     global tree
     hijos = aA.gimmeTheChildren(identLonely, tree)
@@ -30,6 +34,8 @@ def an_identLonely(identLonely):
     ID = aA.gimmeTheValue(label)
     return ID
 
+
+# Función que analiza la regla identArrayVar
 def an_identArrayVar(identArrayVar):
     global tree
     hijos = aA.gimmeTheChildren(identArrayVar, tree)
@@ -40,12 +46,14 @@ def an_identArrayVar(identArrayVar):
     arr = [[ID, expressionVar]]
     return arr
 
+# Función que analiza la regla typeVar
 def an_typeVar(typeVar):
     global tree
     label = aA.gimmeTheLabel(tree, typeVar)
     tipo = aA.gimmeTheValue(label)
     return tipo
 
+# Función que analiza la regla identifierVar
 def an_identifierVar(identifierVar):
     global tree
     hijos = aA.gimmeTheChildren(identifierVar, tree)
@@ -58,6 +66,7 @@ def an_identifierVar(identifierVar):
         ID = an_identArrayVar(hijo)
     return ID
 
+# Función que analiza la regla oneVar
 def an_oneVar(oneVar):
     global tree
     hijos = aA.gimmeTheChildren(oneVar, tree)
@@ -67,6 +76,7 @@ def an_oneVar(oneVar):
     ID = an_identifierVar(identifierVar)
     createVar(ID, tipo)
 
+# Función que analiza la regla sameType
 def an_sameType(sameType):
     global tree
     hijos = aA.gimmeTheChildren(sameType, tree)
@@ -91,6 +101,7 @@ def an_sameType(sameType):
         arr += IDs
     createVarFromList(arr, tipo)
 
+# Función que analiza la regla sameTypeFinal
 def an_sameTypeFinal(sameTypeFinal):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeFinal, tree)
@@ -98,6 +109,7 @@ def an_sameTypeFinal(sameTypeFinal):
     ID = an_identifierVar(identifierVar)
     return ID
 
+# Función que analiza la regla sameTypeRecursive
 def an_sameTypeRecursive(sameTypeRecursive):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeRecursive, tree)
@@ -126,6 +138,7 @@ def an_sameTypeRecursive(sameTypeRecursive):
         arr = ID
         return arr
 
+# Función que analiza la regla newType
 def an_newType(newType):
     global tree
     hijos = aA.gimmeTheChildren(newType, tree)
@@ -137,6 +150,7 @@ def an_newType(newType):
     createVar(ID, tipo)
     an_varAux(varAux)
 
+# Función que crea variables a partir de una lista
 def createVarFromList(IDs, tipo):
     global tree
     global dictVariablesGlobales
@@ -167,6 +181,7 @@ def createVarFromList(IDs, tipo):
                 obj = VariableComun(ID, tipo)
                 dictVariablesGlobales[ID] = obj
 
+# Función que crea una variable
 def createVar(ID, tipo):
     global tree
     global dictVariablesGlobales
@@ -198,6 +213,7 @@ def createVar(ID, tipo):
             obj = VariableComun(ID, tipo)
             dictVariablesGlobales[ID] = obj
 
+# Función que verifica si se repite un ID en el diccionario
 def IDinDict(ID):
     global dictVariablesGlobales
     keys = dictVariablesGlobales.keys()
@@ -209,6 +225,7 @@ def IDinDict(ID):
     except:
         return False
 
+# Función que analiza la regla varAux
 def an_varAux(varAux):
     global tree
     hijos = aA.gimmeTheChildren(varAux, tree)
@@ -222,17 +239,20 @@ def an_varAux(varAux):
     else:
         an_newType(hijo)
 
+# Función que analiza la regla vars
 def an_vars(vars):
     global tree
     hijos = aA.gimmeTheChildren(vars, tree)
     varAux = hijos[0]
     an_varAux(varAux)
 
+# Función que imprime la información de las variables del diccionario
 def printInfo(dictionary):
     keys = dictionary.keys()
     for i in keys:
         dictionary[i].imprimirDatos()
 
+# Función inicial que recibe el nodo vars y regresa un diccionario de variables
 def init(vars, lista):
     global dictVariablesGlobales
     global tree

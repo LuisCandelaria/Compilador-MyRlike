@@ -14,6 +14,9 @@
 # expresiones.
 #
 # Indice:
+# 1. Imports
+# 2. Análisis del árbol semántico apartir de expressionVar
+# 3. Función inicial 
 #
 # -----------------------------------------------------------------------------
 
@@ -25,6 +28,7 @@ tree = []
 
 pila = []
 
+# Función que analiza el nodo y adhiere la constante a una pila
 def an_operadorAndconstant(hijo):
     global tree
     global pila
@@ -32,6 +36,7 @@ def an_operadorAndconstant(hijo):
     value = aA.gimmeTheValue(label)
     pila += [value]
 
+# Función que analiza la regla termOperationVar
 def an_termOperationVar(termOperationVar):
     global tree
     hijos = aA.gimmeTheChildren(termOperationVar, tree)
@@ -42,6 +47,7 @@ def an_termOperationVar(termOperationVar):
     an_operadorAndconstant(operador)
     an_termVar(termVar)
 
+# Función que analiza la regla expressionOperationVar
 def an_expressionOperationVar(expressionOperationVar):
     global tree
     hijos = aA.gimmeTheChildren(expressionOperationVar, tree)
@@ -52,6 +58,7 @@ def an_expressionOperationVar(expressionOperationVar):
     an_operadorAndconstant(operador)
     an_expressionVar(expressionVar)
 
+# Función que analiza la regla otherExpressionVar
 def an_otherExpressionVar(otherExpressionVar):
     global tree
     global pila
@@ -61,6 +68,7 @@ def an_otherExpressionVar(otherExpressionVar):
     an_expressionVar(expressionVar)
     pila += [')']
 
+# Función que analiza la regla auctionVar
 def an_auctionVar(auctionVar):
     global tree
     hijos = aA.gimmeTheChildren(auctionVar, tree)
@@ -78,6 +86,7 @@ def an_auctionVar(auctionVar):
         #otherExpressionVar = hijo
         #an_otherExpressionVar(otherExpressionVar)
 
+# Función que analiza la regla termVar
 def an_termVar(termVar):
     global tree
     hijos = aA.gimmeTheChildren(termVar, tree)
@@ -91,6 +100,7 @@ def an_termVar(termVar):
         auctionVar = hijo
         an_auctionVar(auctionVar)
 
+# Función que analiza la regla expressionVar
 def an_expressionVar(expressionVar):
     global tree
     hijos = aA.gimmeTheChildren(expressionVar, tree)
@@ -104,6 +114,8 @@ def an_expressionVar(expressionVar):
         termVar = hijo
         an_termVar(termVar)
 
+# Función inicial que recibe el nodo expressionVar y regresa el resultado de la expresión
+# llamando al archivo solver
 def init(expressionVar, lista):
     global tree
     global pila

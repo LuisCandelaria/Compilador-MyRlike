@@ -6,9 +6,17 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo analiza el árbol semántico a partir del nodo bloque, el archivo
+# al final regresará un diccionario de estatutos, sus puntos neurálgicos
+# también son considerados en este análisis. Esta archivo es para cualquier
+# bloque, ya sea el principal o el de una función.
 #
 # Indice:
-#
+# 1. Imports
+# 2. Analizador del bloque y sus derivados
+# 3. Recreación de los cuádruplos
+# 4. Función inicial
+# 
 # -----------------------------------------------------------------------------
 
 import analizadorArbol as aA
@@ -20,12 +28,14 @@ pila = []
 tree = []
 contador = 1
 
+# Función que regresa el valor de una etiqueta
 def an_label(hijo):
     global tree
     label = aA.gimmeTheLabel(tree, hijo)
     value  = aA.gimmeTheValue(label)
     return value
 
+# Función que analiza la regla identLonely
 def an_identLonely(identLonely):
     global tree
     hijos = aA.gimmeTheChildren(identLonely, tree)
@@ -33,6 +43,7 @@ def an_identLonely(identLonely):
     ID = an_label(ID)
     return [ID]
 
+# Función que analiza la regla identArray
 def an_identArray(identArray):
     global tree
     hijos = aA.gimmeTheChildren(identArray, tree)
@@ -44,6 +55,7 @@ def an_identArray(identArray):
     stack = [ID, '-[-'] + pilaExp + ['-]-']
     return stack
 
+# Función que analiza la regla identifier
 def an_identifier(identifier):
     global tree
     hijos = aA.gimmeTheChildren(identifier, tree)
@@ -58,6 +70,7 @@ def an_identifier(identifier):
         ID = an_identArray(identArray)
         return ID
 
+# Función que analiza la regla assignment
 def an_assignment(assignment):
     global tree
     global pila
@@ -103,6 +116,7 @@ def an_assignment(assignment):
         finalQuad = ['='] + ID + IDFinal
     pila += [finalQuad]
 
+# Función que analiza la regla shortCondition (if incompleto)
 def an_shortCondition(shortCondition):
     global tree
     global pila
@@ -123,6 +137,7 @@ def an_shortCondition(shortCondition):
     an_block(block)
     pila += [['EndOfIf']]
 
+# Función que analiza la regla longCondition (if completo)
 def an_longCondition(longCondition):
     global tree
     global pila
@@ -147,6 +162,7 @@ def an_longCondition(longCondition):
     an_block(block2)
     pila += [['EndOfIf']]
 
+# Función que analiza el nodo padre: regla ifStatement
 def an_ifStatement(ifStatement):
     global tree
     hijos = aA.gimmeTheChildren(ifStatement, tree)
@@ -159,6 +175,7 @@ def an_ifStatement(ifStatement):
         longCondition = hijo
         an_longCondition(longCondition)
     
+# Función que analiza la regla writingFinal
 def an_writingFinal(writingFinal):
     global tree
     global pila
@@ -185,6 +202,7 @@ def an_writingFinal(writingFinal):
         finalQuad = ['writeExp'] + IDFinal
         pila += [finalQuad]
 
+# Función que analiza la regla recursiva writingRecursive 
 def an_writingRecursive(writingRecursive):
     global tree
     global pila
@@ -219,6 +237,7 @@ def an_writingRecursive(writingRecursive):
         writingRecursive = hijo2
         an_writingRecursive(writingRecursive)
 
+# Función que analiza el nodo padre de escritura: writing
 def an_writing(writing):
     global tree
     hijos = aA.gimmeTheChildren(writing, tree)
@@ -233,6 +252,7 @@ def an_writing(writing):
         writingRecursive = hijo
         an_writingRecursive(writingRecursive)
 
+# Función que lee directamente los IDs en la regla identfier
 def an_identifierRead(identifier):
     global tree
     global pila
@@ -263,6 +283,7 @@ def an_identifierRead(identifier):
         salida = ID + '[' + IDFinal[0] + ']' 
         return salida
 
+# Función que analiza la regla recursiva readingRecursive
 def an_readingRecursive(readingRecursive):
     global tree
     global pila
@@ -284,6 +305,7 @@ def an_readingRecursive(readingRecursive):
         quad = ['read', ID]
         pila += [quad]
 
+# Función que analiza el nodo padre de lectura: reading
 def an_reading(reading):
     global tree
     global pila
@@ -303,6 +325,7 @@ def an_reading(reading):
         readingRecursive = hijo
         an_readingRecursive(readingRecursive)
 
+# Función que analiza la regla del ciclo For
 def an_conditional(conditional):
     global tree
     global pila
@@ -325,6 +348,7 @@ def an_conditional(conditional):
     pila += [['GotoT']]
     pila += [['EndOfLoop']]
 
+# Función que analiza la regla del ciclo While
 def an_nonconditional(nonconditional):
     global tree
     global pila
@@ -357,6 +381,7 @@ def an_nonconditional(nonconditional):
     pila += [['GotoT']]
     pila += [['EndOfLoop']]
 
+# Función que analiza el nodo padre de los ciclos: loop
 def an_loop(loop):
     global tree
     hijos = aA.gimmeTheChildren(loop, tree)
@@ -369,6 +394,7 @@ def an_loop(loop):
         nonconditional = hijo
         an_nonconditional(nonconditional)
 
+# Función que analiza la llamada recursiva (más de un parámetro) 
 def an_callRecursive(callRecursive):
     global tree
     global pila
@@ -388,6 +414,7 @@ def an_callRecursive(callRecursive):
     finalStack = IDFinal
     return finalStack + an_callAux(callAux)
 
+# Función que analiza la regla auxiliar de la llamada de una función
 def an_callAux(callAux):
     global tree
     global pila
@@ -416,6 +443,7 @@ def an_callAux(callAux):
     else:
         return []
 
+# Función que analiza la regla de una llamada a una función
 def an_functionCall(functionCall):
     global tree
     global pila
@@ -444,6 +472,7 @@ def an_functionCall(functionCall):
     quads = [era] + quads
     pila += quads
 
+# Función que analiza el estatuto de retorno
 def an_returnStatement(returnStatement):
     global tree
     global pila
@@ -491,6 +520,7 @@ def an_returnStatement(returnStatement):
             finalQuad = ['return'] + IDFinal
             pila += [finalQuad]
 
+# Función que analiza la regla de la regressionn
 def an_regressionFunc(regressionFunc):
     global tree
     global pila
@@ -502,6 +532,7 @@ def an_regressionFunc(regressionFunc):
     stack = ['regression', ID1, ID2]
     pila += [stack]
 
+# Función que analiza la regla que grafica dos arreglos
 def an_plotXYFunc(plotXYFunc):
     global tree
     global pila
@@ -513,9 +544,11 @@ def an_plotXYFunc(plotXYFunc):
     stack = ['plot', ID1, ID2]
     pila += [stack]
 
+# Función auxiliar de error
 def error(hijo):
     print('Error')
 
+# Función que contiene el switch de tipo de estatuto
 def an_statute(statute):
     global tree
     hijos = aA.gimmeTheChildren(statute, tree)
@@ -534,6 +567,7 @@ def an_statute(statute):
     }
     switch_statute.get(value, error)(hijo)
 
+# Función que analiza la regla del bloque recursivo (más de un estatuto)
 def an_blockRecursive(blockRecursive):
     global tree
     hijos = aA.gimmeTheChildren(blockRecursive, tree)
@@ -542,6 +576,7 @@ def an_blockRecursive(blockRecursive):
     an_statute(statute)
     an_blockAux(blockAux)
 
+# Función que analiza la regla auxiliar del bloque
 def an_blockAux(blockAux):
     global tree
     hijos = aA.gimmeTheChildren(blockAux, tree)
@@ -554,12 +589,14 @@ def an_blockAux(blockAux):
         blockRecursive = hijo
         an_blockRecursive(blockRecursive)
 
+# Función que analiza la regla del bloque
 def an_block(block):
     global tree
     hijos = aA.gimmeTheChildren(block, tree)
     blockAux = hijos[0]
     an_blockAux(blockAux)
 
+# Función que reescribe los cuádruplos tomando en cuenta los puntos neurálgicos (parte del código intermedio)
 def remakeStack(pila):
     contador = 1
     diccionario = {}
@@ -607,6 +644,7 @@ def remakeStack(pila):
             contador += 1
     return diccionario
 
+# Función inicial del archivo, recibe el nodo del bloque y regresa una pila de cuádruplos
 def init(block, lista):
     global tree
     global pila

@@ -6,8 +6,14 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo analiza las expresiones dentro de los corchetes de una variable local
+# o parmámetro. Luego se tomó en cuenta que no se aceptarán arreglos como parámetros
+# de una función.
 #
 # Indice:
+# 1. Imports
+# 2. Analizador del árbol semántico
+# 3. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -19,12 +25,14 @@ tree = []
 
 pila = []
 
+# Función que regresa el valor de una etiqueta
 def an_label(hijo):
     global tree
     label = aA.gimmeTheLabel(tree, hijo)
     value  = aA.gimmeTheValue(label)
     return value
 
+# Función que analiza la regla de la constante entera
 def an_someInt(someInt):
     global tree
     global pila
@@ -33,6 +41,7 @@ def an_someInt(someInt):
     value = an_label(hijo)
     pila += [value]
 
+# Función que analiza la regla identLonely
 def an_identLonely(identLonely):
     global tree
     global pila
@@ -41,6 +50,7 @@ def an_identLonely(identLonely):
     value = an_label(hijo)
     pila += [value]
 
+# Función que analiza la regla identifier
 def an_identifier(identifier):
     global tree
     hijos = aA.gimmeTheChildren(identifier, tree)
@@ -52,6 +62,7 @@ def an_identifier(identifier):
         print("No quiero arreglos en el tamaño")
         sys.exit()
 
+# Función que analiza la regla constant
 def an_constant(constant):
     global tree
     hijos = aA.gimmeTheChildren(constant, tree)
@@ -64,6 +75,7 @@ def an_constant(constant):
         print("Debe ser entero")
         sys.exit()
 
+# Función que analiza la regla auction
 def an_auction(auction):
     global tree
     hijos = aA.gimmeTheChildren(auction, tree)
@@ -82,6 +94,7 @@ def an_auction(auction):
         print("No quiero otra cosa que no sea entero")
         sys.exit()
 
+# Función que analiza la regla idioms
 def an_idioms(idioms):
     global tree
     hijos = aA.gimmeTheChildren(idioms, tree)
@@ -94,6 +107,7 @@ def an_idioms(idioms):
         print("El tamaño debe ser entero")
         sys.exit()
 
+# Función que analiza la regla factor
 def an_factor(factor):
     global tree
     hijos = aA.gimmeTheChildren(factor, tree)
@@ -106,6 +120,7 @@ def an_factor(factor):
         print("El tamaño debe ser entero")
         sys.exit()
 
+# Función que analiza la regla termOperation
 def an_termOperation(termOperation):
     global tree
     global pila
@@ -118,6 +133,7 @@ def an_termOperation(termOperation):
     pila += [operador]
     an_term(term)
 
+# Función que analiza la regla term
 def an_term(term):
     global tree
     hijos = aA.gimmeTheChildren(term, tree)
@@ -130,6 +146,7 @@ def an_term(term):
         termOperation = hijo
         an_termOperation(termOperation)
 
+# Función que analiza la regla expressionOperation
 def an_expressionOperation(expressionOperation):
     global tree
     global pila
@@ -142,6 +159,7 @@ def an_expressionOperation(expressionOperation):
     pila += [operador]
     an_expression(expression)
 
+# Función que analiza la regla expression
 def an_expression(expression):
     global tree
     hijos = aA.gimmeTheChildren(expression, tree)
@@ -154,6 +172,8 @@ def an_expression(expression):
         expressionOperation = hijo
         an_expressionOperation(expressionOperation)
 
+# Función inicial que recibe el nodo expression y regresa la solución de la expresión
+# llamando al archivo solver
 def init(expression, lista):
     global tree
     global pila

@@ -6,8 +6,18 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo lee expresiones entregadas desde un estatuto que los ocupe, como
+# una asignación, escritura, o expresion de una condición, esto incluye llamadas
+# de funciones, este archivo también considera la prioridad de los operadores.
 #
 # Indice:
+# 1. Imports
+# 2. Asgnación de prioridad de operador
+# 3. Generador de cuádruplos
+# 4. Dentro de los braquets (tamaño de arreglo)
+# 5. Dentro de los paréntesis
+# 6. Función que inicia el análisis de la expresión
+# 7. Función inicial del archivo
 #
 # -----------------------------------------------------------------------------
 
@@ -16,6 +26,8 @@ import sys
 pila = []
 contador = 1
 
+
+# Esta función recibe un operador y asigna la priordad con un número entero
 def assignPriority(operador):
     priority = 1
     if(operador == '*' or operador == '/'):
@@ -28,6 +40,8 @@ def assignPriority(operador):
         priority = 4
     return priority
 
+# Este generador de cuádruplos recibe una expresión con 3 datos (ej. 1 + 2)
+# regresa un cuádruplo y crea una variable temporal
 def quickGen(expresion):
     global contador
     global pila
@@ -40,6 +54,7 @@ def quickGen(expresion):
     quad = [operador, data1, data2, temp]
     return quad
 
+# Función que analiza una expresión dentro de los corchetes de un arreglo
 def insideBrackets(prototype):
     global pila
     global contador
@@ -159,6 +174,7 @@ def insideBrackets(prototype):
         del prototype[0]
     return prototype
 
+# Función que analiza la expresión dentro de un paréntesis
 def insideParen(prototype):
     global pila
     first = prototype[0]
@@ -247,6 +263,7 @@ def insideParen(prototype):
             prototype = insideParen(prototype)
     return prototype
 
+# Función que inicia el análisis de una expresión, verificando si hay paréntesis, corchetes, etc.
 def begin(expresion):
     global pila
     global contador
@@ -390,6 +407,9 @@ def begin(expresion):
             expresion = begin(expresion)
     return expresion
 
+# Función inicial que recibe la expresión completa y un contador que señala la cantidad de temproales creados hasta ahora
+# Esta función regresa una lista de listas (cuádruplos) para luego anexarlos a una pila principal y crear un diccionario
+# de cuádruplos
 def init(expresion, cont):
     global pila
     global contador

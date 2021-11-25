@@ -6,8 +6,14 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo analiza el árbol semántico a partir del nodo que inicia el
+# análisis de parámetros
 #
 # Indice:
+# 1. Imports
+# 2. Funciones auxiliares
+# 3. Funciones analizadoras del árbol semántico
+# 4. Función inicial
 #
 # -----------------------------------------------------------------------------
 
@@ -18,6 +24,7 @@ from classVariables import *
 diccionarioParametros = {}
 tree = {}
 
+# Función que verifica si un ID se repite entre los parámetros
 def IDinDict(ID):
     global diccionarioParametros
     keys = diccionarioParametros.keys()
@@ -29,12 +36,14 @@ def IDinDict(ID):
     except:
         return False
 
+# Función que regresa el valor de una etiqueta
 def an_label(hijo):
     global tree
     label = aA.gimmeTheLabel(tree, hijo)
     value  = aA.gimmeTheValue(label)
     return value
 
+# Función que crea variables a partir de una lista de IDs
 def createVarFromList(IDs, tipo):
     global tree
     global diccionarioParametros
@@ -48,6 +57,7 @@ def createVarFromList(IDs, tipo):
             obj = VariableComun(ID, tipo)
             diccionarioParametros[ID] = obj
 
+# Función que crea una variable
 def createVar(ID, tipo):
     global tree
     global diccionarioParametros
@@ -60,6 +70,7 @@ def createVar(ID, tipo):
         obj = VariableComun(ID, tipo)
         diccionarioParametros[ID] = obj
 
+# Función que analiza la regla identLonely
 def an_identLonely(identLonely):
     global tree
     hijos = aA.gimmeTheChildren(identLonely, tree)
@@ -68,6 +79,7 @@ def an_identLonely(identLonely):
     ID = aA.gimmeTheValue(label)
     return [ID]
 
+# Función que analiza la regla identifierVar
 def an_identifierVar(identifierVar):
     global tree
     hijos = aA.gimmeTheChildren(identifierVar, tree)
@@ -81,6 +93,7 @@ def an_identifierVar(identifierVar):
         sys.exit()
     return ID
 
+# Función que analiza la regla sameTypeParamRecursive
 def an_sameTypeParamRecursive(sameTypeParamRecursive, tipo):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeParamRecursive, tree)
@@ -99,6 +112,7 @@ def an_sameTypeParamRecursive(sameTypeParamRecursive, tipo):
         parameters = hijo
         an_parameters(parameters)
 
+# Función que analiza la regla sameTypeParamFinal
 def an_sameTypeParamFinal(sameTypeParamFinal, tipo):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeParamFinal, tree)
@@ -106,6 +120,7 @@ def an_sameTypeParamFinal(sameTypeParamFinal, tipo):
     ID = an_identifierVar(identifierVar)
     createVar(ID, tipo)
 
+# Función que analiza la regla sameTypeParam
 def an_sameTypeParam(sameTypeParam):
     global tree
     hijos = aA.gimmeTheChildren(sameTypeParam, tree)
@@ -123,6 +138,7 @@ def an_sameTypeParam(sameTypeParam):
         sameTypeParamRecursive = hijo
         an_sameTypeParamRecursive(sameTypeParamRecursive, tipo)
 
+# Función que analiza la regla newParam
 def an_newParam(newParam):
     global tree
     hijos = aA.gimmeTheChildren(newParam, tree)
@@ -134,6 +150,7 @@ def an_newParam(newParam):
     createVar(ID, tipo)
     an_parameters(parameters)
 
+# Función que analiza la regla oneParam
 def an_oneParam(oneParam):
     global tree
     hijos = aA.gimmeTheChildren(oneParam, tree)
@@ -143,6 +160,7 @@ def an_oneParam(oneParam):
     ID = an_identifierVar(identifierVar)
     createVar(ID, tipo)
 
+# Función que analiza la regla paremeters
 def an_parameters(parameters):
     global tree
     hijos = aA.gimmeTheChildren(parameters, tree)
@@ -158,6 +176,7 @@ def an_parameters(parameters):
         newParam = hijo
         an_newParam(newParam)
 
+# Función inicial que recibe el nodo parameters y regresa un diccionario de variables
 def init(parameters, lista):
     global tree
     global diccionarioParametros

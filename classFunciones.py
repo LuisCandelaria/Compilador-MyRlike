@@ -6,8 +6,12 @@
 # A00816826
 #
 # Notas y comentarios:
+# Este archivo contiene las clases para cada tipo de función
 #
 # Indice:
+# 1. Import
+# 2. Función de retorno
+# 3. Función void
 #
 # -----------------------------------------------------------------------------
 
