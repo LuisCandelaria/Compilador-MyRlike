@@ -41,7 +41,8 @@ def an_identArray(identArray):
     expression = hijos[1]
     pilaExp = aE.init(expression, tree)
     aE.pila = []
-    return [ID, '-[-'] + pilaExp + ['-]-']
+    stack = [ID, '-[-'] + pilaExp + ['-]-']
+    return stack
 
 def an_identifier(identifier):
     global tree
@@ -66,21 +67,40 @@ def an_assignment(assignment):
     expression = hijos[2]
     pilaExp = aE.init(expression, tree)
     aE.pila = []
+    if(len(pilaExp) > 2):
+        if(pilaExp[2] == []):
+            del pilaExp[2]
     ID = an_identifier(identifier)
     stack = ID + ['='] + pilaExp
     quads = aCE.init(pilaExp, contador)
     aCE.pila = []
+    cuadruplosID = []
+    contador = quads[2]
+    contador += 1
+    if(len(ID) > 1):
+        if(ID[1] == '-[-'):
+            quadsID = aCE.init(ID, contador)
+            aCE.pila = []
+            cuadruplosID = quadsID[0][1]
+            pila += [cuadruplosID]
+            ID = quadsID[1]
+            contador = quads[2]
+
     cuadruplos = quads[0]
     IDFinal = quads[1]
+    quadsExp = []
     if(isinstance(IDFinal, list)):
         if(len(IDFinal) == 1):
-            IDFinal = IDFinal
+            do = "nothinng"
         else:
             IDFinal = IDFinal[0][2]
             IDFinal = [IDFinal]
     contador = quads[2]
     pila += cuadruplos
-    finalQuad = ['='] + ID + IDFinal
+    if(cuadruplosID != []):
+        finalQuad = ['='] + ID + IDFinal
+    else:
+        finalQuad = ['='] + ID + IDFinal
     pila += [finalQuad]
 
 def an_shortCondition(shortCondition):
@@ -404,18 +424,21 @@ def an_functionCall(functionCall):
     aE.an_functionCall(functionCall)
     unaPila = aE.pila
     aE.pila = []
+    if(len(unaPila) > 2):
+        if(unaPila[2] == []):
+            del unaPila[2]
     quads = aCE.init(unaPila, contador)
     aCE.pila = []
     quads = quads[0]
     if(len(quads) == 1):
+        sys.exit()
         quads[0][0] = 'callFunction'
         del quads[0][len(quads[0])-1]
     else:
         del quads[0]
         quads[len(quads)-1][0] = 'callFunction'
-    del quads[-1][-1]
+    #del quads[-1][-1]
     lastQuad = quads[-1]
-    print(lastQuad)
     ID = lastQuad[1]
     era = ['era', ID]
     quads = [era] + quads
@@ -429,14 +452,44 @@ def an_returnStatement(returnStatement):
     expression = hijos[0]
     pilaExp = aE.init(expression, tree)
     aE.pila = []
-    quads = aCE.init(pilaExp, contador)
-    aCE.pila = []
-    cuadruplos = quads[0]
-    IDFinal = quads[1]
-    contador = quads[2]
-    pila += cuadruplos
-    finalQuad = ['return'] + IDFinal
-    pila += [finalQuad]
+    if(len(pilaExp) == 1):
+        temp = 't' + str(contador)
+        quad = ['=', temp, pilaExp[0]]
+        pila += [quad]
+        IDFinal = [temp]
+        finalQuad = ['return'] + IDFinal
+        pila += [finalQuad]
+    else:
+        if(len(pilaExp[1]) > 2):
+            aux = [pilaExp[0]] + [pilaExp[1]]
+            pilaExp = pilaExp[2:len(pilaExp)]
+            quads = aCE.init(aux, contador)
+            aCE.pila = []
+            cuadruplos = quads[0]
+            IDFinal = quads[1]
+            contador = quads[2]
+            pila += cuadruplos
+            pilaExp[0] = IDFinal + [pilaExp[0][1], pilaExp[0][0]]
+            pilaExp = pilaExp[0]
+            quad = aCE.quickGen(pilaExp)
+            contador = aCE.contador
+            aCE.pila = []
+            cuadruplos = [quad]
+            IDFinal = quads[2]
+            pila += cuadruplos
+            finalQuad = ['return'] + [IDFinal]
+            pila += [finalQuad]
+        else:
+            if(pilaExp[1] == []):
+                del pilaExp[1]
+            quads = aCE.init(pilaExp, contador)
+            aCE.pila = []
+            cuadruplos = quads[0]
+            IDFinal = quads[1]
+            contador = quads[2]
+            pila += cuadruplos
+            finalQuad = ['return'] + IDFinal
+            pila += [finalQuad]
 
 def an_regressionFunc(regressionFunc):
     global tree

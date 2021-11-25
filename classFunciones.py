@@ -23,7 +23,7 @@ class FuncionReturn():
         self.estatutos = estatutos
     
     def imprimirDatos(self):
-        print(self.ID + "\t" + self.tipo + "\t")
+        print(self.ID + "\t" + self.tipo + "\t" + self.especie)
         print(self.parametros)
         print(self.variablesLocales)
         print(self.estatutos)

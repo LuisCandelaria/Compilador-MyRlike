@@ -23,6 +23,7 @@ import analizadorVarGlobales as aVG
 import analizadorFunciones as aF
 import analizadorBloqueFun as aBF
 import millenium as millenium
+import mountDoom as mD
 
 dictVariablesGlobales = {}
 dictFunciones = {}
@@ -103,5 +104,5 @@ def init(lista):
     funciones()
     principal()
     stack = millenium.init(dictVariablesGlobales, dictEstatutos, dictFunciones)
-    memoryMap = stack[1]
-    dictEstatutos = stack[0]
+    #memoryMap = stack[1]
+    #dictEstatutos = stack[0]

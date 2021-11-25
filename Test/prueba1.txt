@@ -1,17 +1,48 @@
 program pruebaNueva;
 vars
-    int: i, j, k[100];
-    float: p, q;
-function void idFunction(int: f, z)
+    int: i, j, p, arreglo[10];
+    float: valor;
+function int fact(int: j)
 vars
-    int: h;
-    float: m, n;
-    char: r[5];
+    int: i;
 {
-    h = i + 1;
-    m = n + m;
+    p = 1;
+    i = j + (p - j * 2 + j);
+    if(j == 1) then {
+        return(j);
+    }
+    else {
+        return(j * fact(j - 1));
+    }
+    return(1);
+}
+function void calcula(int: y)
+vars
+    int: x;
+{
+    x = 1;
+    while(x < 11) {
+        y = y * arreglo[x];
+        x = x + 1;
+        write(arreglo[x]);
+    }
+    write("acumulado", y);
 }
 main() {
-    regression(k, k);
-    idFunction(i, j);
+    p = 2;
+    j = p * 2;
+    i = fact(p);
+    read(i);
+
+    for i = 1 to i < 9 do {
+        arreglo[i] = p + i;
+    }
+    
+    p = average(arreglo);
+    while(i > 0) {
+        calcula(p - i);
+        j = fact(arreglo[i]);
+        write(j, i);
+        i = i + 1;
+    }
 }

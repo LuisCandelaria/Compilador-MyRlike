@@ -16,6 +16,7 @@ from classMemory import *
 from classVariables import *
 from cuboSemantico import cuboSemantico
 import severen as severen
+import mountDoom as mD
 
 memoryMap = {}
 dictionaryVarG = {}
@@ -23,6 +24,7 @@ dictionaryStatutes = {}
 dictionaryFunctions = {}
 dictionaryAddress = {}
 dictionaryAddressTemp = {}
+direcciones = {}
 sizeInt = 1000
 inicioInt = 8000
 inicioTempInt = 1000
@@ -74,6 +76,9 @@ def an_parametro(quad, i, IDparametros, contParametro):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    global direcciones
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     tipoFirst = ''
@@ -85,6 +90,10 @@ def an_parametro(quad, i, IDparametros, contParametro):
         print("Se exedió en número de parametros")
         sys.exit()
     IDparametro = arrParametros[contParametro]
+    if(quad[-1] == True):
+        add = quad[2]
+        add = add[0:len(add)-1]
+        return [IDparametro, add]
     tipoParametro = IDparametros[IDparametro].tipo
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDs):
@@ -143,6 +152,7 @@ def an_parametro(quad, i, IDparametros, contParametro):
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
     stack = asignarEspacioParametro(IDparametro, tipoFirst)
+    quad += [True]
     return stack
 
 def an_era(quad, i):
@@ -152,6 +162,7 @@ def an_era(quad, i):
     global dictionaryAddressTemp
     global dictionaryFunctions
     global dictionaryStatutes
+    global direcciones
     eraID = i
     i += 1
     functionID = quad[1]
@@ -162,7 +173,6 @@ def an_era(quad, i):
         print("La funcion: " + functionID + " no existe")
         sys.exit()
     obj = dictionaryFunctions[functionID]
-    direcciones = {}
     flag = False
     contParametro = 0
     while(not flag):
@@ -170,10 +180,17 @@ def an_era(quad, i):
         inst = quad[0]
         if(inst == '+' or inst == '-' or inst == '*' or inst == '/'):
             an_regularExpression(quad, i)
+            stack = mD.init(quad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
         elif(inst == 'param'):
             stack = an_parametro(quad, i, obj.parametros, contParametro)
             IDParametro = stack[0]
             direccion = stack[1]
+            nwQuad = ['=', str(direccion) + 'ç', dictionaryStatutes[i][1]]
+            stack = mD.init(nwQuad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
             direcciones[IDParametro] = direccion
             quad[2] = str(direccion) + 'ç'
             dictionaryStatutes[i] = quad
@@ -184,24 +201,31 @@ def an_era(quad, i):
             if(obj.especie != 'Void'):
                 print("Es una funcion de retorno")
                 sys.exit()
-            stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, i, direcciones)
-            dictionaryStatutes = stack[1]
-            i = stack[0]
-            memoryMap = stack[2]
+            stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direcciones)
+            direcciones = {}
+            memoryMap = stack[0]
             return i
         elif(inst == 'retrieve'):
+            temp = quad[2]
+            tipo = obj.tipo
+            asignarEspacioTemporal(temp, tipo)
+            add = dictionaryAddressTemp[temp]
+            quad[2] = str(add) + '$'
+            dictionaryStatutes[i] = quad
             if(obj.especie == "Retorno"):
                 functionSt = obj.estatutos
                 keysFuncSt = functionSt.keys()
-                lastKeyFuncSt = keysFuncSt[-1]
+                stackKeys = []
+                for k in keysFuncSt:
+                    stackKeys += [k]
+                lastKeyFuncSt = stackKeys[-1]
                 lastQuadFuncSt = functionSt[lastKeyFuncSt]
                 if(lastQuadFuncSt[0] != 'return'):
                     print("La función no tiene un estatuto de retorno al final")
                     sys.exit()
-                stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, i, direcciones)
-                dictionaryStatutes = stack[1]
-                i = stack[0]
-                memoryMap = stack[2]
+                stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direcciones)
+                direcciones = {}
+                memoryMap = stack[0]
                 return i
             else:
                 print("La función " + obj.ID +  " no es de tipo retorno")
@@ -213,6 +237,8 @@ def an_modeFunc(quad, i):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     tipoFirst = ''
@@ -245,6 +271,7 @@ def an_modeFunc(quad, i):
     asignarEspacioTemporal(temp, tipo)
     address = dictionaryAddressTemp[temp]
     quad[2] = str(address) + '$'
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_specialFunc(quad, i):
@@ -252,6 +279,8 @@ def an_specialFunc(quad, i):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     tipoFirst = ''
@@ -288,6 +317,7 @@ def an_specialFunc(quad, i):
     else:
         print("La variable debe ser entera o flotante para el promedio o varianza")
         sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_read(quad, i):
@@ -295,6 +325,8 @@ def an_read(quad, i):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     if(first.find(']', 0, len(first)) == -1):
@@ -332,6 +364,7 @@ def an_read(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_writeExpression(quad, i):
@@ -340,6 +373,8 @@ def an_writeExpression(quad, i):
     global dictionaryAddress
     global dictionaryAddressTemp
     global dictionaryStatutes
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     if(first.find(']', 0, len(first)) == -1):
@@ -380,6 +415,7 @@ def an_writeExpression(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_regression(quad, i):
@@ -387,6 +423,8 @@ def an_regression(quad, i):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     second = quad[2]
@@ -459,6 +497,7 @@ def an_regression(quad, i):
     if(tipoFirst != 'int' or tipoSecond != 'int'):
         print("Imposible")
         sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_jumpFalse(quad, i):
@@ -466,6 +505,8 @@ def an_jumpFalse(quad, i):
     global memoryMap
     global dictionaryAddress
     global dictionaryAddressTemp
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     tipoFirst = ''
@@ -499,6 +540,7 @@ def an_jumpFalse(quad, i):
     if(tipoFirst != 'bool'):
         print("El resultado de la expresión debe ser booleano")
         sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
 def an_equalExpression(quad, i):
@@ -507,23 +549,27 @@ def an_equalExpression(quad, i):
     global dictionaryAddress
     global dictionaryAddressTemp
     global dictionaryStatutes
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     second = quad[2]
     tipoFirst = ''
     tipoSecond = ''
+    flag = False
+    if(isinstance(second, list)):
+        second = second[2]
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDs):
             keysMemory = dictionaryAddress.keys()
             address = dictionaryAddress[first]
             quad[1] = str(address) + 'ç'
             tipoFirst = dictionaryVarG[first].tipo
-        elif(first[0] == '\''):
+        elif(first[0] == '\''): 
             print("Imposible")
             sys.exit()
         elif(first[0] == 't' and first[1].isnumeric()):
-            print("Imposible")
-            sys.exit()
+            flag = True
         elif(first.isnumeric() or first.find('.', 0, len(first)) != -1):
             print("Imposible")
             sys.exit()
@@ -578,8 +624,22 @@ def an_equalExpression(quad, i):
                 quad[2] = second
                 tipoSecond = 'int'
         else:
-            print("Este ID: " + second + " no ha sido definido")
-            sys.exit()
+            add = second[0:len(second)-1]
+            if(len(add) == 4):
+                its = "an address"
+                quad[2] = second
+                add = int(add)
+                if(add >= 1000 and add < 2000):
+                    tipoSecond = 'int'
+                elif(add >= 2000 and add < 3000):
+                    tipoSecond = 'float'
+                elif(add >= 3000 and add < 4000):
+                    tipoSecond = 'char'
+                else:
+                    tipoSecond = 'bool'
+            else:
+                print("no ha sido definido")
+                sys.exit()
     else:
         pos1 = second.find('[', 0, len(second))
         pos2 = second.find(']', 0, len(second))
@@ -599,10 +659,18 @@ def an_equalExpression(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
-    isIt = cuboSemantico[quad[0]][tipoFirst][tipoSecond]
-    if(isIt[0] != True):
-        print("Operación no válida")
-        sys.exit()        
+    if(flag):
+        temp = first
+        tipo = tipoSecond
+        asignarEspacioTemporal(temp, tipo)
+        address = dictionaryAddressTemp[temp]
+        quad[1] = str(address) + '$'
+    else:
+        isIt = cuboSemantico[quad[0]][tipoFirst][tipoSecond]
+        if(isIt[0] != True):
+            print("Operación no válida")
+            sys.exit()
+    quad += [True]       
     dictionaryStatutes[i] = quad
 
 def an_regularExpression(quad, i):
@@ -611,6 +679,8 @@ def an_regularExpression(quad, i):
     global dictionaryAddress
     global dictionaryAddressTemp
     global dictionaryStatutes
+    if(quad[-1] == True):
+        return i
     IDs = dictionaryVarG.keys()
     first = quad[1]
     second = quad[2]
@@ -726,42 +796,38 @@ def an_regularExpression(quad, i):
     else:
         print("Operación no válida")
         sys.exit()
+    quad += [True]
     dictionaryStatutes[i] = quad
 
-def changeQuads():
+def changeQuads(quad, i):
     global dictionaryStatutes
     global dictionaryVarG
     global dictionaryAddress
-    keys = dictionaryStatutes.keys()
-    for i in keys:
-        quad = dictionaryStatutes[i]
-        inst = quad[0]
-        if(inst == '+' or inst == '-' or inst == '*' or inst == '/' or inst == '<' or inst == '>' or inst == '!=' or inst == '==' or inst == '&' or inst == '|'):
-            an_regularExpression(quad, i)
-        elif(inst == '='):
-            an_equalExpression(quad, i)
-        elif(inst == 'GotoF'):
-            an_jumpFalse(quad, i)
-        elif(inst == 'plot' or inst == 'regression'):
-            an_regression(quad, i)
-        elif(inst == 'writeExp'):
-            an_writeExpression(quad, i)
-        elif(inst == 'read'):
-            an_read(quad, i)
-        elif(inst == 'average' or inst == 'variance'):
-            an_specialFunc(quad, i)
-        elif(inst == 'mode'):
-            an_modeFunc(quad, i)
-        elif(inst == 'return'):
-            print("El programa principal no puede hacer return")
-            sys.exit()
-        elif(inst == 'era'):
-            i = an_era(quad, i)
-            keys = dictionaryStatutes.keys()
-        elif(inst == 'return'):
-            print("No puede haber return en el main")
-            sys.exit()
-    print(dictionaryStatutes)
+    global memoryMap
+    inst = quad[0]
+    if(inst == '+' or inst == '-' or inst == '*' or inst == '/' or inst == '<' or inst == '>' or inst == '!=' or inst == '==' or inst == '&' or inst == '|'):
+        an_regularExpression(quad, i)
+    elif(inst == '='):
+        an_equalExpression(quad, i)
+    elif(inst == 'GotoF'):
+        an_jumpFalse(quad, i)
+    elif(inst == 'plot' or inst == 'regression'):
+        an_regression(quad, i)
+    elif(inst == 'writeExp'):
+        an_writeExpression(quad, i)
+    elif(inst == 'read'):
+        an_read(quad, i)
+    elif(inst == 'average' or inst == 'variance'):
+        an_specialFunc(quad, i)
+    elif(inst == 'mode'):
+        an_modeFunc(quad, i)
+    elif(inst == 'return'):
+        print("El programa principal no puede hacer return")
+        sys.exit()
+    elif(inst == 'era'):
+        i = an_era(quad, i)
+        keys = dictionaryStatutes.keys()
+    return i
 
 def asignacionEspacio():
     global dictionaryVarG
@@ -812,5 +878,11 @@ def init(dictVarGlob, dictEstatutos, dictFunciones):
     memoryMap['tempChar'] = objChar
     memoryMap['tempBool'] = objBool
     asignacionEspacio()
-    changeQuads()
+    keys = dictionaryStatutes.keys()
+    for i in keys:
+        quad = dictionaryStatutes[i]
+        i = changeQuads(quad, i)
+        stack = mD.init(quad, memoryMap, i)
+        memoryMap = stack[0]
+        i = stack[1]
     return [dictionaryStatutes, memoryMap]

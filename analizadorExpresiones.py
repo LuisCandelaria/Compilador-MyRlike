@@ -78,13 +78,16 @@ def an_functionCall(functionCall):
     ID = hijos[0]
     ID = an_label(ID)
     callAux = hijos[1]
+    length = len(pila)
+    auxPila = pila[0:length]
+    pila = []
     expresiones = aLl.init(callAux, tree)
     stack = []
     for i in expresiones:
         stack += [i]
     funcStack = ['callFunction', ID] + stack
     era = ['era', ID]
-    pila += [era] + [funcStack]
+    pila += [era] + [funcStack] + [auxPila]
 
 def an_varianceFunc(varianceFunc):
     global tree

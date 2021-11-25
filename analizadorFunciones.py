@@ -44,6 +44,7 @@ def an_withParameters(withParameters):
     hijo = hijos[1]
     value = an_label(hijo)
     parameters = aP.init(parameters, tree)
+    aP.diccionarioParametros = {}
     if(value == "funcVer1"):
         funcVer1 = hijo
         diccionario = an_funcVer1(funcVer1)
@@ -112,7 +113,7 @@ def an_funcAux(funcAux):
             obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
             dictFunciones[ID] = obj
         else:
-            obj = FuncionReturn(ID, parametros, variablesLocales, estatutos)
+            obj = FuncionReturn(ID, tipo, parametros, variablesLocales, estatutos)
             dictFunciones[ID] = obj
     elif(value == "funcVer1"):
         funcVer1 = hijo

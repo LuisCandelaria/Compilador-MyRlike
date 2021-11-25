@@ -19,7 +19,7 @@ class StackMemory():
         self.tipo = tipo
         self.tamaño = tamaño
         self.DirInicio = DirInicio
-        self.Stack = ['#'] * self.tamaño
+        self.Stack = [1] * self.tamaño
         self.contador = DirInicio
         self.DirLimite = DirLimite
     
@@ -29,17 +29,17 @@ class StackMemory():
             sys.exit()
         if(obj.especie == 'Comun'):
             address = self.contador
-            self.Stack[self.contador - self.DirInicio] = obj.valor
+            self.Stack[self.contador - self.DirInicio] = 0
             self.contador += 1
             return self.contador
         else:
             size = obj.tamaño
-            inicio = self.contador
+            inicio = self.contador+1
             for i in range(0, size):
                 if(self.contador >= self.DirLimite):
                     print("Stack overflow")
                     sys.exit()
-                self.Stack[self.contador - self.DirInicio] = obj.valor[i]
+                self.Stack[self.contador - self.DirInicio] = 0
                 self.contador += 1
             return [inicio, self.contador]
 
@@ -56,7 +56,8 @@ class StackMemory():
         if(address < self.DirInicio or address > self.DirLimite):
             print("Error en la dirección de memoria")
             sys.exit()
-        return self.Stack[address - self.DirInicio]
+        value = self.Stack[address - self.DirInicio]
+        return value
 
     def setValue(self, address, valor):
         self.Stack[address - self.DirInicio] = valor

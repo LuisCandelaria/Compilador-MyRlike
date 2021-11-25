@@ -16,6 +16,8 @@ from classMemory import *
 from classVariables import *
 from cuboSemantico import cuboSemantico
 import severen as severen
+import mountDoom as mD
+import copy
 
 memoryMap = {}
 dictionaryVarG = {}
@@ -29,6 +31,8 @@ dictionaryAddressLoc = {}
 dictionaryAddressParam = {}
 dictionaryAddressTemp = {}
 functionObj = []
+direcciones = {}
+cont = 1
 
 def asignarEspacioParametro(IDParametro, tipo):
     global memoryMap
@@ -70,6 +74,8 @@ def an_return(quad, i):
     global dictionaryAddressParam
     global dictionaryStatutesFun
     global dictionaryFunctions
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -148,6 +154,7 @@ def an_return(quad, i):
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
     if(functionObj.tipo == tipoFirst):
+        quad += [True]
         dictionaryStatutesFun[i] = quad
     else:
         print("El return no es del tipo correcto")
@@ -169,6 +176,7 @@ def an_parametro(quad, i, IDparametros, contParametro):
     global dictionaryAddressParam
     global dictionaryStatutesFun
     global dictionaryFunctions
+    global direcciones
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -182,7 +190,21 @@ def an_parametro(quad, i, IDparametros, contParametro):
         print("Se exedió en número de parametros")
         sys.exit()
     IDparametro = arrParametros[contParametro]
+    if(quad[-1] == True):
+        add = quad[2]
+        add = add[0:len(add)-1]
+        return [IDparametro, add]
     tipoParametro = IDparametros[IDparametro].tipo
+    if(first[-1] == 'ç' or first[-1] == '$'):
+        add = quad[1]
+        add = add[0:len(add)-1]
+        add = int(add)
+        keysAdd = dictionaryAddressTemp.keys()
+        ID = ''
+        for p in keysAdd:
+            check = dictionaryAddressTemp[p]
+            if(check == add):
+                return [ID, add]
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDsGlob or first in IDsParam or first in IDsLoc):
             if(first in IDsParam):
@@ -260,6 +282,7 @@ def an_parametro(quad, i, IDparametros, contParametro):
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
     dictionaryStatutesFun[i] = quad
+    quad += [True]
     stack = asignarEspacioParametro(IDparametro, tipoFirst)
     return stack
 
@@ -274,6 +297,10 @@ def an_era(quad, i):
     global dictionaryAddressParam
     global dictionaryStatutesFun
     global dictionaryFunctions
+    global functionObj
+    global direcciones
+    global cont
+    direccionesNuevas = {}
     eraID = i
     i += 1
     functionID = quad[1]
@@ -284,54 +311,105 @@ def an_era(quad, i):
         print("La función " + functionID + " no existe")
         sys.ext()
     obj = dictionaryFunctions[functionID]
-    direcciones = {}
-    #save progress
-    auxDictParam = dictionaryParam
-    auxDictVarLoc = dictionaryVarLoc
-    auxDictAddressTemp = dictionaryAddressTemp
-    auxDictAddressLoc = dictionaryAddressLoc
-    auxDictAddressParam = dictionaryAddressParam
-    auxDictStatutesFun = dictionaryStatutesFun
-    auxfunctionObj = functionObj
     flag = False
     contParametro = 0
-    while(not flag):
+    while(flag == False):
         quad = dictionaryStatutesFun[i]
         inst = quad[0]
         if(inst == '+' or inst == '-' or inst == '*' or inst == '/'):
             an_regularExpression(quad, i)
+            stack = mD.init(quad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
+            quad = dictionaryStatutesFun[i]
+        elif(inst == '='):
+            an_assignment(quad, i)
+            stack = mD.init(quad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
         elif(inst == 'param'):
             stack = an_parametro(quad, i, obj.parametros, contParametro)
             IDParametro = stack[0]
             direccion = stack[1]
-            direcciones[IDParametro] = direccion
+            nwQuad = ['=', str(direccion) + 'ç', quad[1]]
+            stack = mD.init(nwQuad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
+            direccionesNuevas[IDParametro] = direccion
             quad[2] = str(direccion) + 'ç'
             dictionaryStatutesFun[i] = quad
             contParametro += 1
         elif(inst == 'era'):
             i = an_era(quad, i)
         elif(inst == 'callFunction'):
+            cont += 1
             if(obj.especie != 'Void'):
                 print("Es una funcion de retorno")
                 sys.exit()
-            stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutesFun, dictionaryFunctions, dictionaryAddress, obj, i, direcciones)
-            dictionaryStatutesFun = stack[1]
-            i = stack[0]
-            memoryMap = stack[2]
-            dictionaryParam = auxDictParam
-            dictionaryVarLoc = auxDictVarLoc
-            dictionaryAddressTemp = auxDictAddressTemp
-            dictionaryAddressLoc = auxDictAddressLoc
-            dictionaryAddressParam = auxDictAddressParam
+            #save progress
+            auxDictParam = dict(dictionaryParam)
+            auxDictVarLoc = dict(dictionaryVarLoc)
+            auxDictAddressTemp = dict(dictionaryAddressTemp)
+            auxDictAddressLoc = dict(dictionaryAddressLoc)
+            auxDictAddressParam = dict(dictionaryAddressParam)
+            auxDictStatutesFun = dict(dictionaryStatutesFun)
+            auxfunctionObj = functionObj
+            auxDirecciones = dict(direcciones)
+            stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutesFun, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
+            memoryMap = stack[0]
+            dictionaryParam = dict(auxDictParam)
+            dictionaryVarLoc = dict(auxDictVarLoc)
+            dictionaryAddressTemp = dict(auxDictAddressTemp)
+            dictionaryAddressLoc = dict(auxDictAddressLoc)
+            dictionaryAddressParam = dict(auxDictAddressParam)
+            dictionaryStatutesFun = dict(auxDictStatutesFun)
             functionObj = auxfunctionObj
+            direcciones = dict(auxDirecciones)
             return i
         elif(inst == 'retrieve'):
+            cont += 1
+            temp = quad[2]
+            tipo = obj.tipo
+            asignarEspacioTemporal(temp, tipo)
+            add = dictionaryAddressTemp[temp]
+            quad[2] = str(add) + '$'
+            dictionaryStatutesFun[i] = quad
             if(obj.especie == "Retorno"):
-                print("Se puede")
+                functionSt = obj.estatutos
+                keysFuncSt = functionSt.keys()
+                stackKeys = []
+                for k in keysFuncSt:
+                    stackKeys += [k]
+                lastKeyFuncSt = stackKeys[-1]
+                lastQuadFuncSt = functionSt[lastKeyFuncSt]
+                if(lastQuadFuncSt[0] != 'return'):
+                    print("La función no tiene un estatuto de retorno al final")
+                    sys.exit()
+                #save progress
+                auxDictParam = dict(dictionaryParam)
+                auxDictVarLoc = dict(dictionaryVarLoc)
+                auxDictAddressTemp = dict(dictionaryAddressTemp)
+                auxDictAddressLoc = dict(dictionaryAddressLoc)
+                auxDictAddressParam = dict(dictionaryAddressParam)
+                auxDictStatutesFun = dict(dictionaryStatutesFun)
+                auxfunctionObj = functionObj
+                auxDirecciones = dict(direcciones)
+                stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
+                memoryMap = stack[1]
+                dictionaryParam = dict(auxDictParam)
+                dictionaryVarLoc = dict(auxDictVarLoc)
+                dictionaryAddressTemp = dict(auxDictAddressTemp)
+                dictionaryAddressLoc = dict(auxDictAddressLoc)
+                dictionaryAddressParam = dict(auxDictAddressParam)
+                dictionaryStatutesFun = dict(auxDictStatutesFun)
+                functionObj = auxfunctionObj
+                direcciones = dict(auxDirecciones)
+                return i
             else:
                 print("La función " + obj.ID +  " no es de tipo retorno")
         i += 1
         flag = (inst == 'callFunction' or inst == 'retrieve')
+    return i
 
 def an_modeFunc(quad, i):
     global dictionaryVarG
@@ -343,6 +421,8 @@ def an_modeFunc(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -394,6 +474,7 @@ def an_modeFunc(quad, i):
     asignarEspacioTemporal(temp, tipo)
     address = dictionaryAddressTemp[temp]
     quad[2] = str(address) + '$'
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_specialFunc(quad, i):
@@ -406,6 +487,8 @@ def an_specialFunc(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -461,6 +544,7 @@ def an_specialFunc(quad, i):
     else:
         print("La variable debe ser entera o flotante para el promedio o varianza")
         sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_read(quad, i):
@@ -473,6 +557,8 @@ def an_read(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -536,6 +622,7 @@ def an_read(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_writeExpression(quad, i):
@@ -548,11 +635,13 @@ def an_writeExpression(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
     first = quad[1]
-    if(first.find(']', 0, len(first)) == -1):
+    if(first.find(']') == -1):
         if(first in IDsGlob or first in IDsParam or first in IDsLoc):
             if(first in IDsParam):
                 keysMemory = dictionaryAddressParam.keys()
@@ -614,6 +703,7 @@ def an_writeExpression(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_regression(quad, i):
@@ -626,6 +716,8 @@ def an_regression(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -745,6 +837,7 @@ def an_regression(quad, i):
     if(tipoFirst != 'int' or tipoSecond != 'int'):
         print("Imposible")
         sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_jumpFalse(quad, i):
@@ -757,13 +850,15 @@ def an_jumpFalse(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
     first = quad[1]
     tipoFirst = ''
     if(first.find(']', 0, len(first)) == -1):
-        if(first in IDs):
+        if(first in IDsGlob or first in IDsParam or first in IDsLoc):
             print("No existen las variables booleanas")
             sys.exit()
         elif(first[0] == '\''):
@@ -792,6 +887,7 @@ def an_jumpFalse(quad, i):
     if(tipoFirst != 'bool'):
         print("El resultado de la expresión debe ser booleano")
         sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_equalExpression(quad, i):
@@ -804,6 +900,8 @@ def an_equalExpression(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -811,6 +909,7 @@ def an_equalExpression(quad, i):
     second = quad[2]
     tipoFirst = ''
     tipoSecond = ''
+    flag = False
     if(first.find(']', 0, len(first)) == -1):
         if(first in IDsGlob or first in IDsParam or first in IDsLoc):
             if(first in IDsParam):
@@ -832,8 +931,7 @@ def an_equalExpression(quad, i):
             print("Imposible")
             sys.exit()
         elif(first[0] == 't' and first[1].isnumeric()):
-            print("Imposible")
-            sys.exit()
+            flag = True
         elif(first.isnumeric() or first.find('.', 0, len(first)) != -1):
             print("Imposible")
             sys.exit()
@@ -942,10 +1040,18 @@ def an_equalExpression(quad, i):
         else:
             print("La variable: " + ID + " no es un arreglo")
             sys.exit()
-    isIt = cuboSemantico[quad[0]][tipoFirst][tipoSecond]
-    if(isIt[0] != True):
-        print("Operación no válida")
-        sys.exit()
+    if(flag):
+        temp = first
+        tipo = tipoSecond
+        asignarEspacioTemporal(temp, tipo)
+        address = dictionaryAddressTemp[temp]
+        quad[1] = str(address) + '$'
+    else:
+        isIt = cuboSemantico[quad[0]][tipoFirst][tipoSecond]
+        if(isIt[0] != True):
+            print("Operación no válida")
+            sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def an_regularExpression(quad, i):
@@ -958,6 +1064,8 @@ def an_regularExpression(quad, i):
     global dictionaryAddressLoc
     global dictionaryAddressParam
     global dictionaryStatutesFun
+    if(quad[-1] == True):
+        return i
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -1083,13 +1191,13 @@ def an_regularExpression(quad, i):
         pos1 = second.find('[', 0, len(second))
         pos2 = second.find(']', 0, len(second))
         index = second[pos1+1: pos2]
-        ID = first[0:pos1]
+        ID = second[0:pos1]
         especie = ''
         addressID = ''
         if(ID in IDsParam):
             especie = dictionaryParam[ID].especie
             tipoSecond = dictionaryParam[ID].tipo
-            addressID = dictionaryAddressTemp[ID]
+            addressID = dictionaryAddressParam[ID]
         elif(ID in IDsLoc):
             especie = dictionaryVarLoc[ID].especie
             tipoSecond = dictionaryVarLoc[ID].tipo
@@ -1119,6 +1227,7 @@ def an_regularExpression(quad, i):
     else:
         print("Operación no válida")
         sys.exit()
+    quad += [True]
     dictionaryStatutesFun[i] = quad
 
 def changeQuads():
@@ -1129,6 +1238,8 @@ def changeQuads():
     global dictionaryAddress
     global dictionaryAddressLoc
     global dictionaryAddressParam
+    global memoryMap
+    global cont
     keys = dictionaryStatutesFun.keys()
     for i in keys:
         quad = dictionaryStatutesFun[i]
@@ -1150,14 +1261,20 @@ def changeQuads():
         elif(inst == 'mode'):
             an_modeFunc(quad, i)
         elif(inst == 'return'):
-            if(functionObj.especie != "Retorno"):
+            if(functionObj.especie == "Retorno"):
                 an_return(quad, i)
+                i = '100000'
             else:
                 print("La función: " + functionObj.ID + " no es de tipo Retorno")
                 sys.exit()
         elif(inst == 'era'):
             i = an_era(quad, i)
             keys = dictionaryStatutesFun.keys()
+        if(i == '100000'):
+            break
+        stack = mD.init(quad, memoryMap, i)
+        memoryMap = stack[0]
+        i = stack[1]
 
 def asignacionEspacio():
     global dictionaryVarLoc
@@ -1202,7 +1319,7 @@ def mergeDictionaries(first, second, third):
     dictionary = writeDictionary(finalStack)
     return dictionary
 
-def init(dictParam, dictMemory, dictVarG, dictStatutes, dictFunctions, dictAddress, objFunction, i, direcciones):
+def init(dictParam, dictMemory, dictVarG, dictStatutes, dictFunctions, dictAddress, objFunction, direcciones):
     global memoryMap
     global dictionaryVarG
     global dictionaryVarLoc
@@ -1214,28 +1331,17 @@ def init(dictParam, dictMemory, dictVarG, dictStatutes, dictFunctions, dictAddre
     global dictionaryAddressTemp
     global dictionaryAddressParam
     global functionObj
+    global cont
     memoryMap = dictMemory
-    dictionaryVarG = dictVarG
-    dictionaryParam = dictParam
-    dictionaryStatutes = dictStatutes
+    dictionaryVarG = copy.deepcopy(dictVarG)
+    dictionaryParam = copy.deepcopy(dictParam)
+    dictionaryStatutes = copy.deepcopy(dictStatutes)
     dictionaryFunctions = dictFunctions
-    dictionaryAddress = dictAddress
-    dictionaryAddressParam = direcciones
+    dictionaryAddress = copy.deepcopy(dictAddress)
+    dictionaryAddressParam = copy.deepcopy(direcciones)
     functionObj = objFunction
-    dictionaryStatutesFun = functionObj.estatutos
-    dictionaryVarLoc = functionObj.variablesLocales
+    dictionaryStatutesFun = copy.deepcopy(functionObj.estatutos)
+    dictionaryVarLoc = copy.deepcopy(functionObj.variablesLocales)
     asignacionEspacio()
-    prevQuads = {}
-    nextQuads = {}
-    for j in range(1, i+1):
-        prevQuads[j] = dictionaryStatutes[j]
     changeQuads()
-    for k in range(i+1, len(dictionaryStatutes.keys())+1):
-        nextQuads[k] = dictionaryStatutes[k]
-    dictionaryStatutes = mergeDictionaries(prevQuads, dictionaryStatutesFun, nextQuads)
-    keys = dictionaryStatutes.keys()
-    pila = []
-    for i in keys:
-        pila += [i]
-    lastKey = pila[-1]
-    return[lastKey, dictionaryStatutes, memoryMap]
+    return [memoryMap]

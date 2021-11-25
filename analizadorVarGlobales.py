@@ -28,7 +28,7 @@ def an_identLonely(identLonely):
     ID = hijos[0]
     label = aA.gimmeTheLabel(tree, ID)
     ID = aA.gimmeTheValue(label)
-    return [ID]
+    return ID
 
 def an_identArrayVar(identArrayVar):
     global tree

@@ -1,0 +1,9 @@
+program nuevo;
+vars
+    int: i, j, k[100];
+main() {
+    i = 2 * 4;
+    j = i * 3;
+    read(i);
+    read(j);
+}

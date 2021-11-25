@@ -11,43 +11,43 @@ digraph G {
 13->14
 12[label = identifierVar]
 12->13
-18[ID = k]
-23[Entero = 100]
-22[label = constantVar]
-22->23
-21[label = auctionVar]
-21->22
-20[label = termVar]
-20->21
-19[label = expressionVar]
-19->20
-17[label = identArrayVar]
+18[ID = p]
+17[label = identLonely]
 17->18
-17->19
 16[label = identifierVar]
 16->17
-26[Tipo = float]
-29[ID = p]
-28[label = identLonely]
-28->29
-27[label = identifierVar]
-27->28
-33[ID = q]
+22[ID = arreglo]
+27[Entero = 10]
+26[label = constantVar]
+26->27
+25[label = auctionVar]
+25->26
+24[label = termVar]
+24->25
+23[label = expressionVar]
+23->24
+21[label = identArrayVar]
+21->22
+21->23
+20[label = identifierVar]
+20->21
+30[Tipo = float]
+33[ID = valor]
 32[label = identLonely]
 32->33
 31[label = identifierVar]
 31->32
-30[label = sameTypeFinal]
-30->31
-25[label = sameType]
-25->26
-25->27
-25->30
-24[label = varAux]
-24->25
+29[label = oneVar]
+29->30
+29->31
+28[label = varAux]
+28->29
+19[label = sameTypeRecursive]
+19->20
+19->28
 15[label = sameTypeRecursive]
 15->16
-15->24
+15->19
 11[label = sameTypeRecursive]
 11->12
 11->15
@@ -59,268 +59,1246 @@ digraph G {
 5->6
 4[label = variables]
 4->5
-36[Tipo = void]
-37[ID = idFunction]
-41[Tipo = int]
-44[ID = f]
-43[label = identLonely]
+37[Tipo = int]
+38[ID = fact]
+42[Tipo = int]
+45[ID = j]
+44[label = identLonely]
+44->45
+43[label = identifierVar]
 43->44
-42[label = identifierVar]
-42->43
-48[ID = z]
-47[label = identLonely]
-47->48
-46[label = identifierVar]
-46->47
-45[label = sameTypeParamFinal]
-45->46
-40[label = sameTypeParam]
+41[label = oneParam]
+41->42
+41->43
+40[label = parameters]
 40->41
-40->42
-40->45
-39[label = parameters]
-39->40
-53[Tipo = int]
-56[ID = h]
-55[label = identLonely]
-55->56
-54[label = identifier]
-54->55
-59[Tipo = float]
-62[ID = m]
-61[label = identLonely]
-61->62
-60[label = identifier]
-60->61
-66[ID = n]
-65[label = identLonely]
-65->66
-64[label = identifier]
-64->65
-69[Tipo = char]
-72[ID = r]
-80[Entero = 5]
-79[label = someInt]
-79->80
-78[label = constant]
-78->79
-77[label = auction]
-77->78
-76[label = idioms]
-76->77
-75[label = factor]
-75->76
-74[label = term]
-74->75
-73[label = expression]
-73->74
-71[label = identArray]
-71->72
-71->73
-70[label = identifier]
-70->71
-68[label = oneVarLoc]
-68->69
-68->70
-67[label = varAuxLoc]
-67->68
-63[label = sameTypeRecursiveLoc]
-63->64
-63->67
-58[label = sameTypeLoc]
-58->59
-58->60
-58->63
-57[label = varAuxLoc]
-57->58
-52[label = newTypeLoc]
+50[Tipo = int]
+53[ID = i]
+52[label = identLonely]
 52->53
-52->54
-52->57
-51[label = varAuxLoc]
+51[label = identifier]
 51->52
-50[label = variablesLoc]
-50->51
-88[ID = h]
-87[label = identLonely]
-87->88
-86[label = identifier]
-86->87
-89[Operador = =]
-98[ID = i]
-97[label = identLonely]
-97->98
-96[label = identifier]
-96->97
-95[label = auction]
-95->96
-94[label = idioms]
-94->95
-93[label = factor]
-93->94
-92[label = term]
-92->93
-99[Operador = +]
-107[Entero = 1]
-106[label = someInt]
-106->107
-105[label = constant]
-105->106
-104[label = auction]
-104->105
-103[label = idioms]
-103->104
-102[label = factor]
-102->103
-101[label = term]
-101->102
-100[label = expression]
-100->101
-91[label = expressionOperation]
-91->92
-91->99
-91->100
-90[label = expression]
-90->91
-85[label = assignment]
-85->86
-85->89
-85->90
-84[label = statute]
-84->85
-113[ID = m]
-112[label = identLonely]
-112->113
-111[label = identifier]
-111->112
-114[Operador = =]
-123[ID = n]
-122[label = identLonely]
-122->123
-121[label = identifier]
-121->122
-120[label = auction]
-120->121
-119[label = idioms]
-119->120
-118[label = factor]
-118->119
-117[label = term]
-117->118
-124[Operador = +]
-132[ID = m]
-131[label = identLonely]
-131->132
-130[label = identifier]
-130->131
-129[label = auction]
-129->130
-128[label = idioms]
-128->129
-127[label = factor]
-127->128
-126[label = term]
-126->127
-125[label = expression]
-125->126
-116[label = expressionOperation]
-116->117
-116->124
-116->125
-115[label = expression]
-115->116
-110[label = assignment]
-110->111
-110->114
-110->115
-109[label = statute]
-109->110
-108[label = blockAux]
-108->109
-83[label = blockRecursive]
-83->84
-83->108
-82[label = blockAux]
-82->83
-81[label = block]
-81->82
-49[label = funcVer1]
+49[label = oneVarLoc]
 49->50
-49->81
-38[label = withParameters]
-38->39
-38->49
-35[label = funcAux]
+49->51
+48[label = varAuxLoc]
+48->49
+47[label = variablesLoc]
+47->48
+61[ID = p]
+60[label = identLonely]
+60->61
+59[label = identifier]
+59->60
+62[Operador = =]
+70[Entero = 1]
+69[label = someInt]
+69->70
+68[label = constant]
+68->69
+67[label = auction]
+67->68
+66[label = idioms]
+66->67
+65[label = factor]
+65->66
+64[label = term]
+64->65
+63[label = expression]
+63->64
+58[label = assignment]
+58->59
+58->62
+58->63
+57[label = statute]
+57->58
+77[ID = i]
+76[label = identLonely]
+76->77
+75[label = identifier]
+75->76
+78[Operador = =]
+87[ID = j]
+86[label = identLonely]
+86->87
+85[label = identifier]
+85->86
+84[label = auction]
+84->85
+83[label = idioms]
+83->84
+82[label = factor]
+82->83
+81[label = term]
+81->82
+88[Operador = +]
+103[ID = p]
+102[label = identLonely]
+102->103
+101[label = identifier]
+101->102
+100[label = auction]
+100->101
+99[label = idioms]
+99->100
+98[label = factor]
+98->99
+97[label = term]
+97->98
+104[Operador = -]
+114[ID = j]
+113[label = identLonely]
+113->114
+112[label = identifier]
+112->113
+111[label = auction]
+111->112
+110[label = idioms]
+110->111
+109[label = factor]
+109->110
+115[Operador = *]
+122[Entero = 2]
+121[label = someInt]
+121->122
+120[label = constant]
+120->121
+119[label = auction]
+119->120
+118[label = idioms]
+118->119
+117[label = factor]
+117->118
+116[label = term]
+116->117
+108[label = termOperation]
+108->109
+108->115
+108->116
+107[label = term]
+107->108
+123[Operador = +]
+131[ID = j]
+130[label = identLonely]
+130->131
+129[label = identifier]
+129->130
+128[label = auction]
+128->129
+127[label = idioms]
+127->128
+126[label = factor]
+126->127
+125[label = term]
+125->126
+124[label = expression]
+124->125
+106[label = expressionOperation]
+106->107
+106->123
+106->124
+105[label = expression]
+105->106
+96[label = expressionOperation]
+96->97
+96->104
+96->105
+95[label = expression]
+95->96
+94[label = otherExpression]
+94->95
+93[label = auction]
+93->94
+92[label = idioms]
+92->93
+91[label = factor]
+91->92
+90[label = term]
+90->91
+89[label = expression]
+89->90
+80[label = expressionOperation]
+80->81
+80->88
+80->89
+79[label = expression]
+79->80
+74[label = assignment]
+74->75
+74->78
+74->79
+73[label = statute]
+73->74
+145[ID = j]
+144[label = identLonely]
+144->145
+143[label = identifier]
+143->144
+142[label = auction]
+142->143
+141[label = idioms]
+141->142
+146[Operador = ==]
+152[Entero = 1]
+151[label = someInt]
+151->152
+150[label = constant]
+150->151
+149[label = auction]
+149->150
+148[label = idioms]
+148->149
+147[label = factor]
+147->148
+140[label = factorOperation]
+140->141
+140->146
+140->147
+139[label = factor]
+139->140
+138[label = term]
+138->139
+137[label = expression]
+137->138
+164[ID = j]
+163[label = identLonely]
+163->164
+162[label = identifier]
+162->163
+161[label = auction]
+161->162
+160[label = idioms]
+160->161
+159[label = factor]
+159->160
+158[label = term]
+158->159
+157[label = expression]
+157->158
+156[label = returnStatement]
+156->157
+155[label = statute]
+155->156
+154[label = blockAux]
+154->155
+153[label = block]
+153->154
+177[ID = j]
+176[label = identLonely]
+176->177
+175[label = identifier]
+175->176
+174[label = auction]
+174->175
+173[label = idioms]
+173->174
+172[label = factor]
+172->173
+178[Operador = *]
+184[ID = fact]
+194[ID = j]
+193[label = identLonely]
+193->194
+192[label = identifier]
+192->193
+191[label = auction]
+191->192
+190[label = idioms]
+190->191
+189[label = factor]
+189->190
+188[label = term]
+188->189
+195[Operador = -]
+203[Entero = 1]
+202[label = someInt]
+202->203
+201[label = constant]
+201->202
+200[label = auction]
+200->201
+199[label = idioms]
+199->200
+198[label = factor]
+198->199
+197[label = term]
+197->198
+196[label = expression]
+196->197
+187[label = expressionOperation]
+187->188
+187->195
+187->196
+186[label = expression]
+186->187
+185[label = callAux]
+185->186
+183[label = functionCall]
+183->184
+183->185
+182[label = auction]
+182->183
+181[label = idioms]
+181->182
+180[label = factor]
+180->181
+179[label = term]
+179->180
+171[label = termOperation]
+171->172
+171->178
+171->179
+170[label = term]
+170->171
+169[label = expression]
+169->170
+168[label = returnStatement]
+168->169
+167[label = statute]
+167->168
+166[label = blockAux]
+166->167
+165[label = block]
+165->166
+136[label = longCondition]
+136->137
+136->153
+136->165
+135[label = ifStatement]
+135->136
+134[label = statute]
+134->135
+214[Entero = 1]
+213[label = someInt]
+213->214
+212[label = constant]
+212->213
+211[label = auction]
+211->212
+210[label = idioms]
+210->211
+209[label = factor]
+209->210
+208[label = term]
+208->209
+207[label = expression]
+207->208
+206[label = returnStatement]
+206->207
+205[label = statute]
+205->206
+204[label = blockAux]
+204->205
+133[label = blockRecursive]
+133->134
+133->204
+132[label = blockAux]
+132->133
+72[label = blockRecursive]
+72->73
+72->132
+71[label = blockAux]
+71->72
+56[label = blockRecursive]
+56->57
+56->71
+55[label = blockAux]
+55->56
+54[label = block]
+54->55
+46[label = funcVer1]
+46->47
+46->54
+39[label = withParameters]
+39->40
+39->46
+36[label = funcAux]
+36->37
+36->38
+36->39
+217[Tipo = void]
+218[ID = calcula]
+222[Tipo = int]
+225[ID = y]
+224[label = identLonely]
+224->225
+223[label = identifierVar]
+223->224
+221[label = oneParam]
+221->222
+221->223
+220[label = parameters]
+220->221
+230[Tipo = int]
+233[ID = x]
+232[label = identLonely]
+232->233
+231[label = identifier]
+231->232
+229[label = oneVarLoc]
+229->230
+229->231
+228[label = varAuxLoc]
+228->229
+227[label = variablesLoc]
+227->228
+241[ID = x]
+240[label = identLonely]
+240->241
+239[label = identifier]
+239->240
+242[Operador = =]
+250[Entero = 1]
+249[label = someInt]
+249->250
+248[label = constant]
+248->249
+247[label = auction]
+247->248
+246[label = idioms]
+246->247
+245[label = factor]
+245->246
+244[label = term]
+244->245
+243[label = expression]
+243->244
+238[label = assignment]
+238->239
+238->242
+238->243
+237[label = statute]
+237->238
+264[ID = x]
+263[label = identLonely]
+263->264
+262[label = identifier]
+262->263
+261[label = auction]
+261->262
+260[label = idioms]
+260->261
+265[Operador = <]
+271[Entero = 11]
+270[label = someInt]
+270->271
+269[label = constant]
+269->270
+268[label = auction]
+268->269
+267[label = idioms]
+267->268
+266[label = factor]
+266->267
+259[label = factorOperation]
+259->260
+259->265
+259->266
+258[label = factor]
+258->259
+257[label = term]
+257->258
+256[label = expression]
+256->257
+279[ID = y]
+278[label = identLonely]
+278->279
+277[label = identifier]
+277->278
+280[Operador = =]
+289[ID = y]
+288[label = identLonely]
+288->289
+287[label = identifier]
+287->288
+286[label = auction]
+286->287
+285[label = idioms]
+285->286
+284[label = factor]
+284->285
+290[Operador = *]
+297[ID = arreglo]
+305[ID = x]
+304[label = identLonely]
+304->305
+303[label = identifier]
+303->304
+302[label = auction]
+302->303
+301[label = idioms]
+301->302
+300[label = factor]
+300->301
+299[label = term]
+299->300
+298[label = expression]
+298->299
+296[label = identArray]
+296->297
+296->298
+295[label = identifier]
+295->296
+294[label = auction]
+294->295
+293[label = idioms]
+293->294
+292[label = factor]
+292->293
+291[label = term]
+291->292
+283[label = termOperation]
+283->284
+283->290
+283->291
+282[label = term]
+282->283
+281[label = expression]
+281->282
+276[label = assignment]
+276->277
+276->280
+276->281
+275[label = statute]
+275->276
+312[ID = x]
+311[label = identLonely]
+311->312
+310[label = identifier]
+310->311
+313[Operador = =]
+322[ID = x]
+321[label = identLonely]
+321->322
+320[label = identifier]
+320->321
+319[label = auction]
+319->320
+318[label = idioms]
+318->319
+317[label = factor]
+317->318
+316[label = term]
+316->317
+323[Operador = +]
+331[Entero = 1]
+330[label = someInt]
+330->331
+329[label = constant]
+329->330
+328[label = auction]
+328->329
+327[label = idioms]
+327->328
+326[label = factor]
+326->327
+325[label = term]
+325->326
+324[label = expression]
+324->325
+315[label = expressionOperation]
+315->316
+315->323
+315->324
+314[label = expression]
+314->315
+309[label = assignment]
+309->310
+309->313
+309->314
+308[label = statute]
+308->309
+344[ID = arreglo]
+352[ID = x]
+351[label = identLonely]
+351->352
+350[label = identifier]
+350->351
+349[label = auction]
+349->350
+348[label = idioms]
+348->349
+347[label = factor]
+347->348
+346[label = term]
+346->347
+345[label = expression]
+345->346
+343[label = identArray]
+343->344
+343->345
+342[label = identifier]
+342->343
+341[label = auction]
+341->342
+340[label = idioms]
+340->341
+339[label = factor]
+339->340
+338[label = term]
+338->339
+337[label = expression]
+337->338
+336[label = writingFinal]
+336->337
+335[label = writingAux]
+335->336
+334[label = writing]
+334->335
+333[label = statute]
+333->334
+332[label = blockAux]
+332->333
+307[label = blockRecursive]
+307->308
+307->332
+306[label = blockAux]
+306->307
+274[label = blockRecursive]
+274->275
+274->306
+273[label = blockAux]
+273->274
+272[label = block]
+272->273
+255[label = conditional]
+255->256
+255->272
+254[label = loop]
+254->255
+253[label = statute]
+253->254
+359[Sttring = "acumulado"]
+358[label = writingString]
+358->359
+368[ID = y]
+367[label = identLonely]
+367->368
+366[label = identifier]
+366->367
+365[label = auction]
+365->366
+364[label = idioms]
+364->365
+363[label = factor]
+363->364
+362[label = term]
+362->363
+361[label = expression]
+361->362
+360[label = writingFinal]
+360->361
+357[label = writingRecursive]
+357->358
+357->360
+356[label = writingAux]
+356->357
+355[label = writing]
+355->356
+354[label = statute]
+354->355
+353[label = blockAux]
+353->354
+252[label = blockRecursive]
+252->253
+252->353
+251[label = blockAux]
+251->252
+236[label = blockRecursive]
+236->237
+236->251
+235[label = blockAux]
+235->236
+234[label = block]
+234->235
+226[label = funcVer1]
+226->227
+226->234
+219[label = withParameters]
+219->220
+219->226
+216[label = funcAux]
+216->217
+216->218
+216->219
+215[label = functions]
+215->216
+35[label = recursiveFunc]
 35->36
-35->37
-35->38
+35->215
 34[label = functions]
 34->35
-139[ID = k]
-140[ID = k]
-138[label = regressionFunc]
-138->139
-138->140
-137[label = statute]
-137->138
-144[ID = idFunction]
-154[ID = i]
-153[label = identLonely]
-153->154
-152[label = identifier]
-152->153
-151[label = auction]
-151->152
-150[label = idioms]
-150->151
-149[label = factor]
-149->150
-148[label = term]
-148->149
-147[label = expression]
-147->148
-163[ID = j]
-162[label = identLonely]
-162->163
-161[label = identifier]
-161->162
-160[label = auction]
-160->161
-159[label = idioms]
-159->160
-158[label = factor]
-158->159
-157[label = term]
-157->158
-156[label = expression]
-156->157
-155[label = callAux]
-155->156
-146[label = callRecursive]
-146->147
-146->155
-145[label = callAux]
-145->146
-143[label = functionCall]
-143->144
-143->145
-142[label = statute]
-142->143
-141[label = blockAux]
-141->142
-136[label = blockRecursive]
-136->137
-136->141
-135[label = blockAux]
-135->136
-134[label = block]
-134->135
-133[label = principal]
-133->134
+377[ID = p]
+376[label = identLonely]
+376->377
+375[label = identifier]
+375->376
+378[Operador = =]
+386[Entero = 2]
+385[label = someInt]
+385->386
+384[label = constant]
+384->385
+383[label = auction]
+383->384
+382[label = idioms]
+382->383
+381[label = factor]
+381->382
+380[label = term]
+380->381
+379[label = expression]
+379->380
+374[label = assignment]
+374->375
+374->378
+374->379
+373[label = statute]
+373->374
+393[ID = j]
+392[label = identLonely]
+392->393
+391[label = identifier]
+391->392
+394[Operador = =]
+403[ID = p]
+402[label = identLonely]
+402->403
+401[label = identifier]
+401->402
+400[label = auction]
+400->401
+399[label = idioms]
+399->400
+398[label = factor]
+398->399
+404[Operador = *]
+411[Entero = 2]
+410[label = someInt]
+410->411
+409[label = constant]
+409->410
+408[label = auction]
+408->409
+407[label = idioms]
+407->408
+406[label = factor]
+406->407
+405[label = term]
+405->406
+397[label = termOperation]
+397->398
+397->404
+397->405
+396[label = term]
+396->397
+395[label = expression]
+395->396
+390[label = assignment]
+390->391
+390->394
+390->395
+389[label = statute]
+389->390
+418[ID = i]
+417[label = identLonely]
+417->418
+416[label = identifier]
+416->417
+419[Operador = =]
+426[ID = fact]
+435[ID = p]
+434[label = identLonely]
+434->435
+433[label = identifier]
+433->434
+432[label = auction]
+432->433
+431[label = idioms]
+431->432
+430[label = factor]
+430->431
+429[label = term]
+429->430
+428[label = expression]
+428->429
+427[label = callAux]
+427->428
+425[label = functionCall]
+425->426
+425->427
+424[label = auction]
+424->425
+423[label = idioms]
+423->424
+422[label = factor]
+422->423
+421[label = term]
+421->422
+420[label = expression]
+420->421
+415[label = assignment]
+415->416
+415->419
+415->420
+414[label = statute]
+414->415
+444[ID = i]
+443[label = identLonely]
+443->444
+442[label = identifier]
+442->443
+441[label = readingFinal]
+441->442
+440[label = readingAux]
+440->441
+439[label = reading]
+439->440
+438[label = statute]
+438->439
+453[ID = i]
+452[label = identLonely]
+452->453
+451[label = identifier]
+451->452
+454[Operador = =]
+462[Entero = 1]
+461[label = someInt]
+461->462
+460[label = constant]
+460->461
+459[label = auction]
+459->460
+458[label = idioms]
+458->459
+457[label = factor]
+457->458
+456[label = term]
+456->457
+455[label = expression]
+455->456
+450[label = assignment]
+450->451
+450->454
+450->455
+471[ID = i]
+470[label = identLonely]
+470->471
+469[label = identifier]
+469->470
+468[label = auction]
+468->469
+467[label = idioms]
+467->468
+472[Operador = <]
+478[Entero = 9]
+477[label = someInt]
+477->478
+476[label = constant]
+476->477
+475[label = auction]
+475->476
+474[label = idioms]
+474->475
+473[label = factor]
+473->474
+466[label = factorOperation]
+466->467
+466->472
+466->473
+465[label = factor]
+465->466
+464[label = term]
+464->465
+463[label = expression]
+463->464
+485[ID = arreglo]
+493[ID = i]
+492[label = identLonely]
+492->493
+491[label = identifier]
+491->492
+490[label = auction]
+490->491
+489[label = idioms]
+489->490
+488[label = factor]
+488->489
+487[label = term]
+487->488
+486[label = expression]
+486->487
+484[label = identArray]
+484->485
+484->486
+483[label = identifier]
+483->484
+494[Operador = =]
+503[ID = p]
+502[label = identLonely]
+502->503
+501[label = identifier]
+501->502
+500[label = auction]
+500->501
+499[label = idioms]
+499->500
+498[label = factor]
+498->499
+497[label = term]
+497->498
+504[Operador = +]
+512[ID = i]
+511[label = identLonely]
+511->512
+510[label = identifier]
+510->511
+509[label = auction]
+509->510
+508[label = idioms]
+508->509
+507[label = factor]
+507->508
+506[label = term]
+506->507
+505[label = expression]
+505->506
+496[label = expressionOperation]
+496->497
+496->504
+496->505
+495[label = expression]
+495->496
+482[label = assignment]
+482->483
+482->494
+482->495
+481[label = statute]
+481->482
+480[label = blockAux]
+480->481
+479[label = block]
+479->480
+449[label = nonconditional]
+449->450
+449->463
+449->479
+448[label = loop]
+448->449
+447[label = statute]
+447->448
+519[ID = p]
+518[label = identLonely]
+518->519
+517[label = identifier]
+517->518
+520[Operador = =]
+527[ID = arreglo]
+526[label = averageFunc]
+526->527
+525[label = auction]
+525->526
+524[label = idioms]
+524->525
+523[label = factor]
+523->524
+522[label = term]
+522->523
+521[label = expression]
+521->522
+516[label = assignment]
+516->517
+516->520
+516->521
+515[label = statute]
+515->516
+540[ID = i]
+539[label = identLonely]
+539->540
+538[label = identifier]
+538->539
+537[label = auction]
+537->538
+536[label = idioms]
+536->537
+541[Operador = >]
+547[Entero = 0]
+546[label = someInt]
+546->547
+545[label = constant]
+545->546
+544[label = auction]
+544->545
+543[label = idioms]
+543->544
+542[label = factor]
+542->543
+535[label = factorOperation]
+535->536
+535->541
+535->542
+534[label = factor]
+534->535
+533[label = term]
+533->534
+532[label = expression]
+532->533
+553[ID = calcula]
+563[ID = p]
+562[label = identLonely]
+562->563
+561[label = identifier]
+561->562
+560[label = auction]
+560->561
+559[label = idioms]
+559->560
+558[label = factor]
+558->559
+557[label = term]
+557->558
+564[Operador = -]
+572[ID = i]
+571[label = identLonely]
+571->572
+570[label = identifier]
+570->571
+569[label = auction]
+569->570
+568[label = idioms]
+568->569
+567[label = factor]
+567->568
+566[label = term]
+566->567
+565[label = expression]
+565->566
+556[label = expressionOperation]
+556->557
+556->564
+556->565
+555[label = expression]
+555->556
+554[label = callAux]
+554->555
+552[label = functionCall]
+552->553
+552->554
+551[label = statute]
+551->552
+579[ID = j]
+578[label = identLonely]
+578->579
+577[label = identifier]
+577->578
+580[Operador = =]
+587[ID = fact]
+596[ID = arreglo]
+604[ID = i]
+603[label = identLonely]
+603->604
+602[label = identifier]
+602->603
+601[label = auction]
+601->602
+600[label = idioms]
+600->601
+599[label = factor]
+599->600
+598[label = term]
+598->599
+597[label = expression]
+597->598
+595[label = identArray]
+595->596
+595->597
+594[label = identifier]
+594->595
+593[label = auction]
+593->594
+592[label = idioms]
+592->593
+591[label = factor]
+591->592
+590[label = term]
+590->591
+589[label = expression]
+589->590
+588[label = callAux]
+588->589
+586[label = functionCall]
+586->587
+586->588
+585[label = auction]
+585->586
+584[label = idioms]
+584->585
+583[label = factor]
+583->584
+582[label = term]
+582->583
+581[label = expression]
+581->582
+576[label = assignment]
+576->577
+576->580
+576->581
+575[label = statute]
+575->576
+618[ID = j]
+617[label = identLonely]
+617->618
+616[label = identifier]
+616->617
+615[label = auction]
+615->616
+614[label = idioms]
+614->615
+613[label = factor]
+613->614
+612[label = term]
+612->613
+611[label = expression]
+611->612
+627[ID = i]
+626[label = identLonely]
+626->627
+625[label = identifier]
+625->626
+624[label = auction]
+624->625
+623[label = idioms]
+623->624
+622[label = factor]
+622->623
+621[label = term]
+621->622
+620[label = expression]
+620->621
+619[label = writingFinal]
+619->620
+610[label = writingRecursive]
+610->611
+610->619
+609[label = writingAux]
+609->610
+608[label = writing]
+608->609
+607[label = statute]
+607->608
+633[ID = i]
+632[label = identLonely]
+632->633
+631[label = identifier]
+631->632
+634[Operador = =]
+643[ID = i]
+642[label = identLonely]
+642->643
+641[label = identifier]
+641->642
+640[label = auction]
+640->641
+639[label = idioms]
+639->640
+638[label = factor]
+638->639
+637[label = term]
+637->638
+644[Operador = +]
+652[Entero = 1]
+651[label = someInt]
+651->652
+650[label = constant]
+650->651
+649[label = auction]
+649->650
+648[label = idioms]
+648->649
+647[label = factor]
+647->648
+646[label = term]
+646->647
+645[label = expression]
+645->646
+636[label = expressionOperation]
+636->637
+636->644
+636->645
+635[label = expression]
+635->636
+630[label = assignment]
+630->631
+630->634
+630->635
+629[label = statute]
+629->630
+628[label = blockAux]
+628->629
+606[label = blockRecursive]
+606->607
+606->628
+605[label = blockAux]
+605->606
+574[label = blockRecursive]
+574->575
+574->605
+573[label = blockAux]
+573->574
+550[label = blockRecursive]
+550->551
+550->573
+549[label = blockAux]
+549->550
+548[label = block]
+548->549
+531[label = conditional]
+531->532
+531->548
+530[label = loop]
+530->531
+529[label = statute]
+529->530
+528[label = blockAux]
+528->529
+514[label = blockRecursive]
+514->515
+514->528
+513[label = blockAux]
+513->514
+446[label = blockRecursive]
+446->447
+446->513
+445[label = blockAux]
+445->446
+437[label = blockRecursive]
+437->438
+437->445
+436[label = blockAux]
+436->437
+413[label = blockRecursive]
+413->414
+413->436
+412[label = blockAux]
+412->413
+388[label = blockRecursive]
+388->389
+388->412
+387[label = blockAux]
+387->388
+372[label = blockRecursive]
+372->373
+372->387
+371[label = blockAux]
+371->372
+370[label = block]
+370->371
+369[label = principal]
+369->370
 3[label = programVer1]
 3->4
 3->34
-3->133
+3->369
 1[label = program]
 1->2
 1->3

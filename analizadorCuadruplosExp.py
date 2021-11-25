@@ -31,6 +31,7 @@ def assignPriority(operador):
 def quickGen(expresion):
     global contador
     global pila
+    contador += 1
     data1 = expresion[0]
     operador = expresion[1]
     data2 = expresion[2]
@@ -41,6 +42,7 @@ def quickGen(expresion):
 
 def insideBrackets(prototype):
     global pila
+    global contador
     first = prototype[0]
     if(first == '-]-'):
         del prototype[0]
@@ -151,6 +153,7 @@ def insideBrackets(prototype):
     else:
         stack = [first, '*', '1']
         quad = quickGen(stack)
+        contador += 1
         pila += [quad]
         del prototype[0]
         del prototype[0]
@@ -274,6 +277,33 @@ def begin(expresion):
         '''
         no se hace nada
         '''
+    elif(len(expresion) == 2 and expresion[1] != []):
+        if(expresion[0] == 'average' or expresion[0] == 'mode' or expresion[0] == 'variance'):
+            return expresion
+        calling = expresion[1]
+        ID = calling[1]
+        del calling[0]
+        del calling[0]
+        for i in calling:
+            stack = begin(i)
+            newQuad = ['param', stack[0], ID]
+            pila += [newQuad]
+        temp = 't' + str(contador)
+        newQuad = ['retrieve', ID, temp]
+        contador += 1
+        pila += [newQuad]
+        if(expresion[0] != []):
+            expresion[0] += [temp]
+            expresion = expresion[0]
+            expresion = [expresion[1]] + [expresion[0]] + [expresion[2]]
+            quad = quickGen(expresion)
+            pila += [quad]
+            del expresion[0]
+            del expresion[0]
+            last = pila[-1]
+            temp = last[-1]
+            expresion[0] = temp
+            return expresion
     elif(len(expresion) == 3):
         quad = quickGen(expresion)
         pila += [quad]
@@ -281,7 +311,7 @@ def begin(expresion):
         del expresion[0]
         last = pila[-1]
         temp = last[-1]
-        expresion[0] = temp 
+        expresion[0] = temp
     else:
         data1 = expresion[0]
         second = expresion[1]
@@ -365,6 +395,7 @@ def init(expresion, cont):
     global contador
     contador = cont
     eraQuad = []
+    auxExp = []
     try:
         if(expresion[0][0] == 'era'):
             eraQuad = expresion[0]
@@ -373,6 +404,10 @@ def init(expresion, cont):
             contador += 1
     except:
         do = "nothing"
-    expresion = begin(expresion)
+    try:
+        expresion = begin(expresion)
+    except:
+        print("error")
+        print(expresion)
     pila = [eraQuad] + pila
     return [pila, expresion, contador]

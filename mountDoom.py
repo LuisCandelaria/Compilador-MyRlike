@@ -17,7 +17,6 @@ from statistics import mode, multimode
 import matplotlib.pyplot as plt
 from classMemory import *
 
-dictionaryStatutes = {}
 memoryMap = {}
 
 inicioInt = 8000
@@ -62,14 +61,16 @@ def an_return(quad, i):
     lastCharacter = first[-1]
     if(lastCharacter == 'ç' or lastCharacter == '$'):
         first = first[0:len(first)-1]
-        if(first.find('[') != -1):
+        if(first.find('[') == -1):
             addressFirst = int(first)
         else:
             leftsqbrack = first.find('[')
-            substr = string[0:leftsqbrack]
+            substr = first[0:leftsqbrack]
             dash = substr.find('-')
             firstAdd = substr[0:dash]
+            firstAdd = int(firstAdd)
             secondAdd = substr[dash+1:len(substr)]
+            secondAdd = int(secondAdd)
             indexAdd = first[leftsqbrack+1:len(first)-1]
             size = int(secondAdd) - int(firstAdd)
             indexAdd = int(indexAdd)
@@ -84,28 +85,34 @@ def an_return(quad, i):
     
     keyStackFirst = verifyAddress(addressFirst)
     value = memoryMap[keyStackFirst].getValue(addressFirst)
+    
+    try:
+        temp = waitingForReturn.pop()
+        keyStackTemp = verifyAddress(temp)
+        memoryMap[keyStackFirst].seetValue(temp, value)
+    except:
+        do = "nothing"
 
-    temp = waitingForReturn.pop()
-    keyStackTemp = verifyAddress(temp)
-    memoryMap[keyStackFirst].seetValue(temp, value)
     return i
 
 def an_retrieve(quad, i):
     global memoryMap
     global waitingForReturn
-    first = quad[1]
+    first = quad[2]
     addressFirst = ''
     lastCharacter = first[-1]
     if(lastCharacter == 'ç' or lastCharacter == '$'):
         first = first[0:len(first)-1]
-        if(first.find('[') != -1):
+        if(first.find('[') == -1):
             addressFirst = int(first)
         else:
             leftsqbrack = first.find('[')
-            substr = string[0:leftsqbrack]
+            substr = first[0:leftsqbrack]
             dash = substr.find('-')
             firstAdd = substr[0:dash]
+            firstAdd = int(firstAdd)
             secondAdd = substr[dash+1:len(substr)]
+            secondAdd = int(secondAdd)
             indexAdd = first[leftsqbrack+1:len(first)-1]
             size = int(secondAdd) - int(firstAdd)
             indexAdd = int(indexAdd)
@@ -119,6 +126,7 @@ def an_retrieve(quad, i):
                 addressFirst = firstAdd
     
     waitingForReturn += [addressFirst]
+
     return i
 
 def an_regression(quad, i):
@@ -134,7 +142,9 @@ def an_regression(quad, i):
         first = first[0:len(first)-1]
         dash = first.find('-')
         firstAdd = first[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = first[dash+1:len(first)]
+        secondAdd = int(secondAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
             value = memoryMap[keyStackFirst].getValue(j)
@@ -146,7 +156,9 @@ def an_regression(quad, i):
         second = second[0:len(second)-1]
         dash = second.find('-')
         firstAdd = second[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = second[dash+1:len(second)]
+        secondAdd = int(secondAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
             value = memoryMap[keyStackFirst].getValue(j)
@@ -158,7 +170,7 @@ def an_regression(quad, i):
     m, b = np.polyfit(x, y, 1)
     plt.plot(x, m*x + b)
     plt.show()
-    return i
+    return i+1
 
 def an_plot(quad, i):
     global memoryMap
@@ -173,7 +185,9 @@ def an_plot(quad, i):
         first = first[0:len(first)-1]
         dash = first.find('-')
         firstAdd = first[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = first[dash+1:len(first)]
+        secondAdd = int(secondAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
             value = memoryMap[keyStackFirst].getValue(j)
@@ -185,7 +199,9 @@ def an_plot(quad, i):
         second = second[0:len(second)-1]
         dash = second.find('-')
         firstAdd = second[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = second[dash+1:len(second)]
+        secondAdd = int(secondAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
             value = memoryMap[keyStackFirst].getValue(j)
@@ -213,7 +229,9 @@ def an_mode(quad, i):
         first = first[0:len(first)-1]
         dash = first.find('-')
         firstAdd = first[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = first[dash+1:len(first)]
+        secondAdd = int(secondAdd)
         size = int(secondAdd) - int(firstAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
@@ -247,7 +265,9 @@ def an_variance(quad, i):
         first = first[0:len(first)-1]
         dash = first.find('-')
         firstAdd = first[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = first[dash+1:len(first)]
+        secondAdd = int(secondAdd)
         size = int(secondAdd) - int(firstAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
@@ -285,7 +305,9 @@ def an_average(quad, i):
         first = first[0:len(first)-1]
         dash = first.find('-')
         firstAdd = first[0:dash]
+        firstAdd = int(firstAdd)
         secondAdd = first[dash+1:len(first)]
+        secondAdd = int(secondAdd)
         size = int(secondAdd) - int(firstAdd)
         keyStackFirst = verifyAddress(firstAdd)
         for j in range(firstAdd, secondAdd):
@@ -309,20 +331,22 @@ def an_read(quad, i):
     lastCharacter = first[-1]
     if(lastCharacter == 'ç' or lastCharacter == '$'):
         first = first[0:len(first)-1]
-        if(first.find('[') != -1):
+        if(first.find('[') == -1):
             addressFirst = int(first)
         else:
             leftsqbrack = first.find('[')
-            substr = string[0:leftsqbrack]
+            substr = first[0:leftsqbrack]
             dash = substr.find('-')
             firstAdd = substr[0:dash]
             secondAdd = substr[dash+1:len(substr)]
+            firstAdd = int(firstAdd)
+            secondAdd = int(secondAdd)
             indexAdd = first[leftsqbrack+1:len(first)-1]
             size = int(secondAdd) - int(firstAdd)
             indexAdd = int(indexAdd)
             keyIndex = verifyAddress(indexAdd)
             valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-            if(valueIndex < size or valueIndez >= size):
+            if(valueIndex < 0 or valueIndex >= size):
                 print("Index out of range")
                 sys.exit()
             else:
@@ -336,15 +360,14 @@ def an_read(quad, i):
         valueFirst = memoryMap[keyStackFirst].getValue(addressFirst)
     else:
         valueFirst = first
-    
     print(valueFirst)
+    
     return i
 
 def an_writeStr(quad, i):
     global memoryMap
     first = quad[1]
-    print(first)
-    return i
+    return i+1
 
 def an_write(quad, i):
     global memoryMap
@@ -355,20 +378,22 @@ def an_write(quad, i):
         lastCharacter = first[-1]
         if(lastCharacter == 'ç' or lastCharacter == '$'):
             first = first[0:len(first)-1]
-            if(first.find('[') != -1):
+            if(first.find('[') == -1):
                 addressFirst = int(first)
             else:
                 leftsqbrack = first.find('[')
-                substr = string[0:leftsqbrack]
+                substr = first[0:leftsqbrack]
                 dash = substr.find('-')
                 firstAdd = substr[0:dash]
                 secondAdd = substr[dash+1:len(substr)]
+                firstAdd = int(firstAdd)
+                secondAdd = int(secondAdd)
                 indexAdd = first[leftsqbrack+1:len(first)-1]
                 size = int(secondAdd) - int(firstAdd)
                 indexAdd = int(indexAdd)
                 keyIndex = verifyAddress(indexAdd)
                 valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-                if(valueIndex < size or valueIndez >= size):
+                if(valueIndex < 0 or valueIndex >= size):
                     print("Index out of range")
                     sys.exit()
                 else:
@@ -382,8 +407,7 @@ def an_write(quad, i):
     else:
         valueFirst = first
 
-    print(valueFirst)
-    return i 
+    return i
 
 def an_GotoT(quad, i):
     i = int(quad[1])
@@ -397,16 +421,20 @@ def an_GotoF(quad, i):
 
     if(isinstance(first, str)):
         lastCharacter = first[-1]
-        if(lastCharacter == 'ç' or lastCharacter == '$'):
+        if(lastCharacter == '$'):
             first = first[0:len(first)-1]
             addressFirst = int(first)
+        else:
+            print("Error")
+            sys.exit()
     valueFirst = 0
     keyStackFirst = ''
     if(addressFirst != ''):
         keyStackFirst = verifyAddress(addressFirst)
         valueFirst = memoryMap[keyStackFirst].getValue(addressFirst)
     else:
-        valueFirst = first
+        valueFirst = True
+    
 
     if(valueFirst == False):
         i = second
@@ -423,20 +451,22 @@ def an_assignment(quad, i):
         lastCharacter = second[-1]
         if(lastCharacter == 'ç' or lastCharacter == '$'):
             second = second[0:len(second)-1]
-            if(second.find('[') != -1):
+            if(second.find('[') == -1):
                 addressSecond = int(second)
             else:
                 leftsqbrack = second.find('[')
-                substr = string[0:leftsqbrack]
+                substr = second[0:leftsqbrack]
                 dash = substr.find('-')
                 firstAdd = substr[0:dash]
+                firstAdd = int(firstAdd)
                 secondAdd = substr[dash+1:len(substr)]
+                secondAdd = int(secondAdd)
                 indexAdd = second[leftsqbrack+1:len(second)-1]
                 size = int(secondAdd) - int(firstAdd)
                 indexAdd = int(indexAdd)
                 keyIndex = verifyAddress(indexAdd)
                 valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-                if(valueIndex < size or valueIndez >= size):
+                if(valueIndex < 0 or valueIndex >= size):
                     print("Index out of range")
                     sys.exit()
                 else:
@@ -454,20 +484,22 @@ def an_assignment(quad, i):
         lastCharacter = first[-1]
         if(lastCharacter == 'ç' or lastCharacter == '$'):
             first = first[0:len(first)-1]
-            if(first.find('[') != -1):
+            if(first.find('[') == -1):
                 addressFirst = int(first)
             else:
                 leftsqbrack = first.find('[')
-                substr = string[0:leftsqbrack]
+                substr = first[0:leftsqbrack]
                 dash = substr.find('-')
                 firstAdd = substr[0:dash]
+                firstAdd = int(firstAdd)
                 secondAdd = substr[dash+1:len(substr)]
+                secondAdd = int(secondAdd)
                 indexAdd = first[leftsqbrack+1:len(first)-1]
                 size = int(secondAdd) - int(firstAdd)
                 indexAdd = int(indexAdd)
                 keyIndex = verifyAddress(indexAdd)
                 valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-                if(valueIndex < size or valueIndez >= size):
+                if(valueIndex < 0 or valueIndex >= size):
                     print("Index out of range")
                     sys.exit()
                 else:
@@ -476,7 +508,6 @@ def an_assignment(quad, i):
     keyStackFirst = verifyAddress(addressFirst)
     memoryMap[keyStackFirst].setValue(addressFirst,  valueSecond)
     return i
-
 
 def an_expression(quad, i):
     global memoryMap
@@ -492,20 +523,22 @@ def an_expression(quad, i):
         lastCharacter = first[-1]
         if(lastCharacter == 'ç' or lastCharacter == '$'):
             first = first[0:len(first)-1]
-            if(first.find('[') != -1):
+            if(first.find('[') == -1):
                 addressFirst = int(first)
             else:
                 leftsqbrack = first.find('[')
-                substr = string[0:leftsqbrack]
+                substr = first[0:leftsqbrack]
                 dash = substr.find('-')
                 firstAdd = substr[0:dash]
                 secondAdd = substr[dash+1:len(substr)]
+                firstAdd = int(firstAdd)
+                secondAdd = int(secondAdd)
                 indexAdd = first[leftsqbrack+1:len(first)-1]
                 size = int(secondAdd) - int(firstAdd)
                 indexAdd = int(indexAdd)
                 keyIndex = verifyAddress(indexAdd)
                 valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-                if(valueIndex < size or valueIndez >= size):
+                if(valueIndex < 0 or valueIndex >= size):
                     print("Index out of range")
                     sys.exit()
                 else:
@@ -517,26 +550,28 @@ def an_expression(quad, i):
         keyStackFirst = verifyAddress(addressFirst)
         valueFirst = memoryMap[keyStackFirst].getValue(addressFirst)
     else:
-        valueFirst = first
+        valueFirst = int(first)
     
     if(isinstance(second, str)):
         lastCharacter = second[-1]
         if(lastCharacter == 'ç' or lastCharacter == '$'):
             second = second[0:len(second)-1]
-            if(second.find('[') != -1):
+            if(second.find('[') == -1):
                 addressSecond = int(second)
             else:
                 leftsqbrack = second.find('[')
-                substr = string[0:leftsqbrack]
+                substr = second[0:leftsqbrack]
                 dash = substr.find('-')
                 firstAdd = substr[0:dash]
                 secondAdd = substr[dash+1:len(substr)]
+                firstAdd = int(firstAdd)
+                secondAdd = int(secondAdd)
                 indexAdd = second[leftsqbrack+1:len(second)-1]
                 size = int(secondAdd) - int(firstAdd)
                 indexAdd = int(indexAdd)
                 keyIndex = verifyAddress(indexAdd)
                 valueIndex = memoryMap[keyIndex].getValue(indexAdd)
-                if(valueIndex < size or valueIndez >= size):
+                if(valueIndex < 0 or valueIndex >= size):
                     print("Index out of range")
                     sys.exit()
                 else:
@@ -548,17 +583,21 @@ def an_expression(quad, i):
         keyStackSecond = verifyAddress(addressSecond)
         valueSecond = memoryMap[keyStackSecond].getValue(addressSecond)
     else:
-        valueSecond = second
+        valueSecond = int(second)
 
     third = third[0:len(third)-1]
     addressThird = int(third)
     valueThird = 0
     keyStackThird = verifyAddress(addressThird)
 
-    if(opertor == '+'):
+    if(operator == '+'):
         valueThird = valueFirst + valueSecond
     elif(operator == '-'):
-        valueThird = valueFirst - valueSecond
+        if(isinstance(valueFirst, list)):
+            quad1 = valueFirst
+            init(quad1, memoryMap, i)
+        else:
+            valueThird = valueFirst - valueSecond
     elif(operator == '*'):
         valueThird = valueFirst * valueSecond
     elif(operator == '/'):
@@ -579,46 +618,42 @@ def an_expression(quad, i):
     return i
 
 def error(quad, i):
-    priint("Error")
-    sys.exit()
+    return i
 
-def switchQuad():
-    global dictionaryStatutes
+def switchQuad(estatuto, i):
     global memoryMap
-    keys = dictEstatutos.keys()
-    for i in keys:
-        quad = dictEstatutos[i]
-        operator = quad[0]
-        switch_statute = {
-            '+' : an_expression,
-            '-' : an_expression,
-            '*' : an_expression,
-            '/' : an_expression,
-            '<' : an_expression,
-            '>' : an_expression,
-            '!=' : an_expression,
-            '==' : an_expression,
-            '&' : an_expression,
-            '|' : an_expression,
-            '=' : an_assignment,
-            'GotoF' : an_GotoF,
-            'GotoT' : an_GotoT,
-            'writeExp' : an_write,
-            'writeStr' : an_writeStr,
-            'read' : an_read,
-            'average' : an_average,
-            'variance' : an_variance,
-            'mode' : an_mode,
-            'plot' : an_plot,
-            'regression' : an_regression,
-            'retrieve' : an_retrieve,
-            'return' : an_return,
-        }
-        i = switch_statute.get(operator, error)(quad, i)
-    print("Fin de ejecución")
+    quad = estatuto
+    operator = quad[0]
+    switch_statute = {
+        '+' : an_expression,
+        '-' : an_expression,
+        '*' : an_expression,
+        '/' : an_expression,
+        '<' : an_expression,
+        '>' : an_expression,
+        '!=' : an_expression,
+        '==' : an_expression,
+        '&' : an_expression,
+        '|' : an_expression,
+        '=' : an_assignment,
+        'GotoF' : an_GotoF,
+        'GotoT' : an_GotoT,
+        'writeExp' : an_write,
+        'writeStr' : an_writeStr,
+        'read' : an_read,
+        'average' : an_average,
+        'variance' : an_variance,
+        'mode' : an_mode,
+        'plot' : an_plot,
+        'regression' : an_regression,
+        'retrieve' : an_retrieve,
+        'return' : an_return
+    }
+    i = switch_statute.get(operator, error)(quad, i)
+    return i
 
-def init(dictEstatutos, memoriaVirtual):
-    global dictionaryStatutes
+def init(estatuto, memoriaVirtual, i):
     global memoryMap
-    dictionaryStatutes = dictEstatutos
-    switchQuad()
+    memoryMap = memoriaVirtual
+    i = switchQuad(estatuto, i)
+    return ([memoryMap, i])

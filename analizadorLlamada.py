@@ -31,6 +31,7 @@ def an_callRecursive(callRecursive):
     expression = hijos[0]
     callAux = hijos[1]
     stack = aE.init(expression, tree)
+    aE.pila = []
     pila += [stack]
     an_callAux(callAux)
 
@@ -43,6 +44,7 @@ def an_callAux(callAux):
     if(value == "expression"):
         expression = hijo
         stack = aE.init(expression, tree)
+        aE.pila = []
         stack = stack
         pila += [stack]
     elif(value == "callRecursive"):
