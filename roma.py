@@ -109,6 +109,7 @@ def init(lista):
     variablesGlobales()
     funciones()
     principal()
+    #print(dictEstatutos)
     stack = millenium.init(dictVariablesGlobales, dictEstatutos, dictFunciones)
     #memoryMap = stack[1]
     #dictEstatutos = stack[0]

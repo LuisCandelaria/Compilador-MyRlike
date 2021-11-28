@@ -1,0 +1,8 @@
+program nuevo;
+vars
+    int: i, j, y, k[100];
+main() {
+    read(i);
+    i = i + 5;
+    write(i);
+}

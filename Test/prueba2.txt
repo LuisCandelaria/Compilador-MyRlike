@@ -1,9 +1,46 @@
 program nuevo;
 vars
-    int: i, j, k[100];
+    int: i, j, y, k[100];
+function void unaFuncion()
+vars
+    int: h, l, u[10];
+{
+    
+    for h = 1 to h < 10 do {
+        u[h] = h;
+        write(u[h]);
+    }
+}
+function int otraFuncion(int: p)
+vars
+    int: n;
+{
+    p = 10 + p;
+    return(p);
+}
 main() {
-    i = 2 * 4;
-    j = i * 3;
-    read(i);
-    read(j);
+    i = 2;
+    j = i * 7;
+    for i = 1 to i < 10 do {
+        k[i] = i;
+        write(k[i]);
+    }
+
+    i = 1;
+
+    while(i < 10) {
+        write(i);
+        i = i + 1;
+    }
+
+    j = otraFuncion(5);
+    write(j);
+    
+    j = 11;
+    y = 1;
+    for i = 1 to i < j do {
+        y = y * i;
+    }
+
+    write(y);
 }

@@ -65,6 +65,8 @@ def verifyAddress(address):
 def an_return(quad, i):
     global memoryMap
     global waitingForReturn
+    if(waitingForReturn == []):
+        return i
     first = quad[1]
     addressFirst = ''
     lastCharacter = first[-1]
@@ -98,7 +100,7 @@ def an_return(quad, i):
     try:
         temp = waitingForReturn.pop()
         keyStackTemp = verifyAddress(temp)
-        memoryMap[keyStackFirst].seetValue(temp, value)
+        memoryMap[keyStackFirst].setValue(temp, value)
     except:
         do = "nothing"
 
@@ -302,7 +304,7 @@ def an_variance(quad, i):
 # Regresa el promedio de una lista
 def calculateAvg(stack, size):
     acum = 0
-    for h in stack:
+    for h in range(0, size):
         index = stack[h]
         acum += index
     avg = acum / size
@@ -319,6 +321,7 @@ def an_average(quad, i):
     lastCharacter = first[-1]
     stack = []
     size = 0
+    average = 0
     if(lastCharacter == 'ç' or lastCharacter == '$'):
         first = first[0:len(first)-1]
         dash = first.find('-')
@@ -372,14 +375,19 @@ def an_read(quad, i):
                 firstAdd += valueIndex
                 addressFirst = firstAdd
 
-    valueFirst = 0
+    valueFirst = ''
     keyStackFirst = ''
     if(addressFirst != ''):
         keyStackFirst = verifyAddress(addressFirst)
-        valueFirst = memoryMap[keyStackFirst].getValue(addressFirst)
+        print("Ingresa valor: ")
+        valueFirst = input()
+        if(keyStackFirst == 'globalInt'):
+            valueFirst = int(valueFirst)
+        elif(keyStackFirst == 'globalFloat'):
+            valueFirst = float(valueFirst)
+        memoryMap[keyStackFirst].setValue(addressFirst, valueFirst)
     else:
-        valueFirst = first
-    print(valueFirst)
+        sys.exit()
     
     return i
 
@@ -387,6 +395,7 @@ def an_read(quad, i):
 def an_writeStr(quad, i):
     global memoryMap
     first = quad[1]
+    print(first)
     return i+1
 
 # Solución a la escritura de una expresión (es el temporal de dicha expresión)
@@ -427,12 +436,14 @@ def an_write(quad, i):
         valueFirst = memoryMap[keyStackFirst].getValue(addressFirst)
     else:
         valueFirst = first
+    print(valueFirst)
 
     return i
 
 # Cambio de índice para el diccionario de cuádruplos
 def an_GotoT(quad, i):
     i = int(quad[1])
+    i -= 1
     return i
 
 # Solución al salto en falso
@@ -461,6 +472,7 @@ def an_GotoF(quad, i):
 
     if(valueFirst == False):
         i = second
+        i -= 1
     return i
 
 # Solución a la asignación

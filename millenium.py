@@ -93,7 +93,14 @@ def an_parametro(quad, i, IDparametros, contParametro):
     global dictionaryAddressTemp
     global direcciones
     if(quad[-1] == True):
-        return i
+        parametros = IDparametros.keys()
+        arrParametros = []
+        for j in parametros:
+            arrParametros += [j]
+        IDFromParam = arrParametros[contParametro]
+        AddressToSend = direcciones[IDFromParam]
+        stack = [IDFromParam, AddressToSend, True]
+        return stack
     IDs = dictionaryVarG.keys()
     first = quad[1]
     tipoFirst = ''
@@ -192,7 +199,7 @@ def an_era(quad, i):
     obj = dictionaryFunctions[functionID]
     flag = False
     contParametro = 0
-    while(not flag):
+    while(flag == False):
         quad = dictionaryStatutes[i]
         inst = quad[0]
         if(inst == '+' or inst == '-' or inst == '*' or inst == '/'):
@@ -219,7 +226,6 @@ def an_era(quad, i):
                 print("Es una funcion de retorno")
                 sys.exit()
             stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direcciones)
-            direcciones = {}
             memoryMap = stack[0]
             return i
         elif(inst == 'retrieve'):
@@ -240,8 +246,10 @@ def an_era(quad, i):
                 if(lastQuadFuncSt[0] != 'return'):
                     print("La función no tiene un estatuto de retorno al final")
                     sys.exit()
+                stack = mD.init(quad, memoryMap, i)
+                memoryMap = stack[0]
+                i = stack[1]
                 stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direcciones)
-                direcciones = {}
                 memoryMap = stack[0]
                 return i
             else:
@@ -852,7 +860,6 @@ def changeQuads(quad, i):
         sys.exit()
     elif(inst == 'era'):
         i = an_era(quad, i)
-        keys = dictionaryStatutes.keys()
     return i
 
 # Función que asigna espacio en la memoria virtual a las variables globales
@@ -909,10 +916,19 @@ def init(dictVarGlob, dictEstatutos, dictFunciones):
     memoryMap['tempBool'] = objBool
     asignacionEspacio()
     keys = dictionaryStatutes.keys()
-    for i in keys:
-        quad = dictionaryStatutes[i]
+    pilaKeys = []
+    for m in keys:
+        pilaKeys += [m]
+    limit = len(pilaKeys)
+    i = 1
+    while(i != pilaKeys[-1]+1):
+        try:
+            quad = dictionaryStatutes[i]
+        except:
+            sys.exit()
         i = changeQuads(quad, i)
         stack = mD.init(quad, memoryMap, i)
         memoryMap = stack[0]
         i = stack[1]
+        i += 1
     return [dictionaryStatutes, memoryMap]

@@ -1,0 +1,25 @@
+program nuevo;
+vars
+    int: n, i, j, k, p;
+function int fib(int: f)
+vars
+    int: actual, siguiente, aux, x;
+{
+    siguiente = 1;
+    actual = 0;
+    aux = 0;
+    for x = 1 to x < f do {
+        aux = actual;
+        actual = siguiente;
+        write(actual);
+        siguiente = siguiente + aux;
+    }
+    return(actual);
+    
+}
+main() {
+    n = 13;
+    i = 0;
+    i = fib(n);
+    write(i);
+}

@@ -39,7 +39,7 @@ class StackMemory():
         else:
             size = obj.tamaño
             inicio = self.contador+1
-            for i in range(0, size):
+            for i in range(0, size+1):
                 if(self.contador >= self.DirLimite):
                     print("Stack overflow")
                     sys.exit()

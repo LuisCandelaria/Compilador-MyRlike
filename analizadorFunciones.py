@@ -134,7 +134,7 @@ def an_funcAux(funcAux):
         diccionario = an_funcVer1(funcVer1)
         variablesLocales = diccionario["varLoc"]
         estatutos = diccionario["estatutos"]
-        parametros = "vacio"
+        parametros = {}
         if(tipo == "void"):
             obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
             dictFunciones[ID] = obj
@@ -145,8 +145,8 @@ def an_funcAux(funcAux):
         funcVer2 = hijo
         diccionario = an_funcVer2(funcVer2)
         estatutos = diccionario["estatutos"]
-        variablesLocales = "vacio"
-        parametros = "vacio"
+        variablesLocales = {}
+        parametros = {}
         if(tipo == "void"):
             obj = FunctionVoid(ID, parametros, variablesLocales, estatutos)
             dictFunciones[ID] = obj

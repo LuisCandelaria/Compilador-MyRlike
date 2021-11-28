@@ -99,78 +99,86 @@ def an_return(quad, i):
     IDsLoc = dictionaryVarLoc.keys()
     first = quad[1]
     tipoFirst = ''
-    if(first.find(']', 0, len(first)) == -1):
-        if(first in IDsGlob or first in IDsParam or first in IDsLoc):
-            if(first in IDsParam):
-                keysMemory = dictionaryAddressParam.keys()
-                address = dictionaryAddressParam[first]
-                quad[1] = str(address) + 'ç'
-                tipoFirst = dictionaryParam[first].tipo
-            elif(first in IDsLoc):
-                keysMemory = dictionaryAddressLoc.keys()
-                address = dictionaryAddressLoc[first]
-                quad[1] = str(address) + 'ç'
-                tipoFirst = dictionaryVarLoc[first].tipo
-            else:
-                keysMemory = dictionaryAddress.keys()
-                address = dictionaryAddress[first]
-                quad[1] = str(address) + 'ç'
-                tipoFirst = dictionaryVarG[first].tipo
-        elif(first[0] == '\''):
-            tipoFirst = 'char'
-        elif(first[0] == 't' and first[1].isnumeric()):
-            address = dictionaryAddressTemp[first]
-            quad[1] = str(address) + '$'
-            if(address >= 1000 and address < 2000):
-                tipoFirst = 'int'
-            elif(address >= 2000 and address < 3000):
-                tipoFirst = 'float'
-            elif(address >= 3000 and address < 4000):
+    if(isinstance(first, str)):
+        if(first.find(']', 0, len(first)) == -1):
+            if(first in IDsGlob or first in IDsParam or first in IDsLoc):
+                if(first in IDsParam):
+                    keysMemory = dictionaryAddressParam.keys()
+                    address = dictionaryAddressParam[first]
+                    quad[1] = str(address) + 'ç'
+                    tipoFirst = dictionaryParam[first].tipo
+                elif(first in IDsLoc):
+                    keysMemory = dictionaryAddressLoc.keys()
+                    address = dictionaryAddressLoc[first]
+                    quad[1] = str(address) + 'ç'
+                    tipoFirst = dictionaryVarLoc[first].tipo
+                else:
+                    keysMemory = dictionaryAddress.keys()
+                    address = dictionaryAddress[first]
+                    quad[1] = str(address) + 'ç'
+                    tipoFirst = dictionaryVarG[first].tipo
+            elif(first[0] == '\''):
                 tipoFirst = 'char'
+            elif(first[0] == 't' and first[1].isnumeric()):
+                address = dictionaryAddressTemp[first]
+                quad[1] = str(address) + '$'
+                if(address >= 1000 and address < 2000):
+                    tipoFirst = 'int'
+                elif(address >= 2000 and address < 3000):
+                    tipoFirst = 'float'
+                elif(address >= 3000 and address < 4000):
+                    tipoFirst = 'char'
+                else:
+                    tipoFirst = 'bool'
+            elif(first.isnumeric() or first.find('.', 0, len(first)) != -1):
+                if(first.find('.', 0, len(first)) != -1):
+                    first = float(first)
+                    quad[1] = first
+                    tipoFirst = 'float'
+                else:
+                    first = int(first)
+                    quad[1] = first
+                    tipoFirst = 'int'
             else:
-                tipoFirst = 'bool'
-        elif(first.isnumeric() or first.find('.', 0, len(first)) != -1):
-            if(first.find('.', 0, len(first)) != -1):
-                first = float(first)
-                quad[1] = first
-                tipoFirst = 'float'
-            else:
-                first = int(first)
-                quad[1] = first
-                tipoFirst = 'int'
-        else:
-            print("Este ID: " + first + " no ha sido definido")
-            sys.exit()
-    else:
-        pos1 = first.find('[', 0, len(first))
-        pos2 = first.find(']', 0, len(first))
-        index = first[pos1+1: pos2]
-        ID = first[0:pos1]
-        especie = ''
-        addressID = ''
-        if(ID in IDsParam):
-            especie = dictionaryParam[ID].especie
-            tipoFirst = dictionaryParam[ID].tipo
-            addressID = dictionaryAddressTemp[ID]
-        elif(ID in IDsLoc):
-            especie = dictionaryVarLoc[ID].especie
-            tipoFirst = dictionaryVarLoc[ID].tipo
-            addressID = dictionaryAddressLoc[ID]
-        else:
-            especie = dictionaryVarG[ID].especie
-            tipoFirst = dictionaryVarG[ID].tipo
-            addressID = dictionaryAddress[ID]
-        if(especie == "Arreglo"):
-            addresstemp = dictionaryAddressTemp[index]
-            quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
-            if(addresstemp >= 1000 and addresstemp < 2000):
-                tipoTemp = '''tipoFirst = 'int'''
-            else:
-                print("El indice debe ser entero")
+                print("Este ID: " + first + " no ha sido definido")
                 sys.exit()
         else:
-            print("La variable: " + ID + " no es un arreglo")
-            sys.exit()
+            pos1 = first.find('[', 0, len(first))
+            pos2 = first.find(']', 0, len(first))
+            index = first[pos1+1: pos2]
+            ID = first[0:pos1]
+            especie = ''
+            addressID = ''
+            if(ID in IDsParam):
+                especie = dictionaryParam[ID].especie
+                tipoFirst = dictionaryParam[ID].tipo
+                addressID = dictionaryAddressTemp[ID]
+            elif(ID in IDsLoc):
+                especie = dictionaryVarLoc[ID].especie
+                tipoFirst = dictionaryVarLoc[ID].tipo
+                addressID = dictionaryAddressLoc[ID]
+            else:
+                especie = dictionaryVarG[ID].especie
+                tipoFirst = dictionaryVarG[ID].tipo
+                addressID = dictionaryAddress[ID]
+            if(especie == "Arreglo"):
+                addresstemp = dictionaryAddressTemp[index]
+                quad[1] = str(addressID[0]) + '-' + str(addressID[1]) + '[' + str(addresstemp) + ']' + 'ç'
+                if(addresstemp >= 1000 and addresstemp < 2000):
+                    tipoTemp = '''tipoFirst = 'int'''
+                else:
+                    print("El indice debe ser entero")
+                    sys.exit()
+            else:
+                print("La variable: " + ID + " no es un arreglo")
+                sys.exit()
+    else:
+        if(isinstance(first, int)):
+            tipoFirst = 'int'
+        elif(isinstance(first, float)):
+            tipoFirst = 'float'
+        else:
+            tipoFirst = 'char'
     if(functionObj.tipo == tipoFirst):
         quad += [True]
         dictionaryStatutesFun[i] = quad
@@ -197,6 +205,15 @@ def an_parametro(quad, i, IDparametros, contParametro):
     global dictionaryStatutesFun
     global dictionaryFunctions
     global direcciones
+    if(quad[-1] == True):
+        parametros = IDparametros.keys()
+        arrParametros = []
+        for j in parametros:
+            arrParametros += [j]
+        IDFromParam = arrParametros[contParametro]
+        AddressToSend = direcciones[IDFromParam]
+        stack = [IDFromParam, AddressToSend, True]
+        return stack
     IDsGlob = dictionaryVarG.keys()
     IDsParam = dictionaryParam.keys()
     IDsLoc = dictionaryVarLoc.keys()
@@ -369,24 +386,24 @@ def an_era(quad, i):
                 print("Es una funcion de retorno")
                 sys.exit()
             #save progress
-            auxDictParam = dict(dictionaryParam)
-            auxDictVarLoc = dict(dictionaryVarLoc)
-            auxDictAddressTemp = dict(dictionaryAddressTemp)
-            auxDictAddressLoc = dict(dictionaryAddressLoc)
-            auxDictAddressParam = dict(dictionaryAddressParam)
-            auxDictStatutesFun = dict(dictionaryStatutesFun)
-            auxfunctionObj = functionObj
-            auxDirecciones = dict(direcciones)
+            auxDictParam = copy.deepcopy(dictionaryParam)
+            auxDictVarLoc = copy.deepcopy(dictionaryVarLoc)
+            auxDictAddressTemp = copy.deepcopy(dictionaryAddressTemp)
+            auxDictAddressLoc = copy.deepcopy(dictionaryAddressLoc)
+            auxDictAddressParam = copy.deepcopy(dictionaryAddressParam)
+            auxDictStatutesFun = copy.deepcopy(dictionaryStatutesFun)
+            auxfunctionObj = copy.deepcopy(functionObj)
+            auxDirecciones = copy.deepcopy(direcciones)
             stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutesFun, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
             memoryMap = stack[0]
-            dictionaryParam = dict(auxDictParam)
-            dictionaryVarLoc = dict(auxDictVarLoc)
-            dictionaryAddressTemp = dict(auxDictAddressTemp)
-            dictionaryAddressLoc = dict(auxDictAddressLoc)
-            dictionaryAddressParam = dict(auxDictAddressParam)
-            dictionaryStatutesFun = dict(auxDictStatutesFun)
-            functionObj = auxfunctionObj
-            direcciones = dict(auxDirecciones)
+            dictionaryParam = copy.deepcopy(auxDictParam)
+            dictionaryVarLoc = copy.deepcopy(auxDictVarLoc)
+            dictionaryAddressTemp = copy.deepcopy(auxDictAddressTemp)
+            dictionaryAddressLoc = copy.deepcopy(auxDictAddressLoc)
+            dictionaryAddressParam = copy.deepcopy(auxDictAddressParam)
+            dictionaryStatutesFun = copy.deepcopy(auxDictStatutesFun)
+            functionObj = copy.deepcopy(auxfunctionObj)
+            direcciones = copy.deepcopy(auxDirecciones)
             return i
         elif(inst == 'retrieve'):
             cont += 1
@@ -408,24 +425,24 @@ def an_era(quad, i):
                     print("La función no tiene un estatuto de retorno al final")
                     sys.exit()
                 #save progress
-                auxDictParam = dict(dictionaryParam)
-                auxDictVarLoc = dict(dictionaryVarLoc)
-                auxDictAddressTemp = dict(dictionaryAddressTemp)
-                auxDictAddressLoc = dict(dictionaryAddressLoc)
-                auxDictAddressParam = dict(dictionaryAddressParam)
-                auxDictStatutesFun = dict(dictionaryStatutesFun)
-                auxfunctionObj = functionObj
-                auxDirecciones = dict(direcciones)
+                auxDictParam = copy.deepcopy(dictionaryParam)
+                auxDictVarLoc = copy.deepcopy(dictionaryVarLoc)
+                auxDictAddressTemp = copy.deepcopy(dictionaryAddressTemp)
+                auxDictAddressLoc = copy.deepcopy(dictionaryAddressLoc)
+                auxDictAddressParam = copy.deepcopy(dictionaryAddressParam)
+                auxDictStatutesFun = copy.deepcopy(dictionaryStatutesFun)
+                auxfunctionObj = copy.deepcopy(functionObj)
+                auxDirecciones = copy.deepcopy(direcciones)
                 stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
-                memoryMap = stack[1]
-                dictionaryParam = dict(auxDictParam)
-                dictionaryVarLoc = dict(auxDictVarLoc)
-                dictionaryAddressTemp = dict(auxDictAddressTemp)
-                dictionaryAddressLoc = dict(auxDictAddressLoc)
-                dictionaryAddressParam = dict(auxDictAddressParam)
-                dictionaryStatutesFun = dict(auxDictStatutesFun)
-                functionObj = auxfunctionObj
-                direcciones = dict(auxDirecciones)
+                memoryMap = stack[0]
+                dictionaryParam = copy.deepcopy(auxDictParam)
+                dictionaryVarLoc = copy.deepcopy(auxDictVarLoc)
+                dictionaryAddressTemp = copy.deepcopy(auxDictAddressTemp)
+                dictionaryAddressLoc = copy.deepcopy(auxDictAddressLoc)
+                dictionaryAddressParam = copy.deepcopy(auxDictAddressParam)
+                dictionaryStatutesFun = copy.deepcopy(auxDictStatutesFun)
+                functionObj = copy.deepcopy(auxfunctionObj)
+                direcciones = copy.deepcopy(auxDirecciones)
                 return i
             else:
                 print("La función " + obj.ID +  " no es de tipo retorno")
@@ -1261,7 +1278,7 @@ def an_regularExpression(quad, i):
     dictionaryStatutesFun[i] = quad
 
 # Función que contiene el switch de los tipos de cuádruplos
-def changeQuads():
+def changeQuads(quad, i):
     global dictionaryStatutesFun
     global dictionaryVarG
     global dictionaryParam
@@ -1272,40 +1289,37 @@ def changeQuads():
     global memoryMap
     global cont
     keys = dictionaryStatutesFun.keys()
-    for i in keys:
-        quad = dictionaryStatutesFun[i]
-        inst = quad[0]
-        if(inst == '+' or inst == '-' or inst == '*' or inst == '/' or inst == '<' or inst == '>' or inst == '!=' or inst == '==' or inst == '&' or inst == '|'):
-            an_regularExpression(quad, i)
-        elif(inst == '='):
-            an_equalExpression(quad, i)
-        elif(inst == 'GotoF'):
-            an_jumpFalse(quad, i)
-        elif(inst == 'plot' or inst == 'regression'):
-            an_regression(quad, i)
-        elif(inst == 'writeExp'):
-            an_writeExpression(quad, i)
-        elif(inst == 'read'):
-            an_read(quad, i)
-        elif(inst == 'average' or inst == 'variance'):
-            an_specialFunc(quad, i)
-        elif(inst == 'mode'):
-            an_modeFunc(quad, i)
-        elif(inst == 'return'):
-            if(functionObj.especie == "Retorno"):
-                an_return(quad, i)
-                i = '100000'
-            else:
-                print("La función: " + functionObj.ID + " no es de tipo Retorno")
-                sys.exit()
-        elif(inst == 'era'):
-            i = an_era(quad, i)
-            keys = dictionaryStatutesFun.keys()
-        if(i == '100000'):
-            break
-        stack = mD.init(quad, memoryMap, i)
-        memoryMap = stack[0]
-        i = stack[1]
+    quad = dictionaryStatutesFun[i]
+    inst = quad[0]
+    if(inst == '+' or inst == '-' or inst == '*' or inst == '/' or inst == '<' or inst == '>' or inst == '!=' or inst == '==' or inst == '&' or inst == '|'):
+        an_regularExpression(quad, i)
+    elif(inst == '='):
+        an_equalExpression(quad, i)
+    elif(inst == 'GotoF'):
+        an_jumpFalse(quad, i)
+    elif(inst == 'plot' or inst == 'regression'):
+        an_regression(quad, i)
+    elif(inst == 'writeExp'):
+        an_writeExpression(quad, i)
+    elif(inst == 'read'):
+        an_read(quad, i)
+    elif(inst == 'average' or inst == 'variance'):
+        an_specialFunc(quad, i)
+    elif(inst == 'mode'):
+        an_modeFunc(quad, i)
+    elif(inst == 'return'):
+        if(functionObj.especie == "Retorno"):
+            an_return(quad, i)
+            stack = mD.init(quad, memoryMap, i)
+            memoryMap = stack[0]
+            i = stack[1]
+            i = 9999999999999
+        else:
+            print("La función: " + functionObj.ID + " no es de tipo Retorno")
+            sys.exit()
+    elif(inst == 'era'):
+        i = an_era(quad, i)
+    return i
 
 # Función que asigna espacio en la memoria virtual a las variables locales
 def asignacionEspacio():
@@ -1371,12 +1385,27 @@ def init(dictParam, dictMemory, dictVarG, dictStatutes, dictFunctions, dictAddre
     dictionaryVarG = copy.deepcopy(dictVarG)
     dictionaryParam = copy.deepcopy(dictParam)
     dictionaryStatutes = copy.deepcopy(dictStatutes)
-    dictionaryFunctions = dictFunctions
+    dictionaryFunctions = copy.deepcopy(dictFunctions)
     dictionaryAddress = copy.deepcopy(dictAddress)
     dictionaryAddressParam = copy.deepcopy(direcciones)
-    functionObj = objFunction
+    functionObj = copy.deepcopy(objFunction)
     dictionaryStatutesFun = copy.deepcopy(functionObj.estatutos)
     dictionaryVarLoc = copy.deepcopy(functionObj.variablesLocales)
     asignacionEspacio()
-    changeQuads()
+    keys = dictionaryStatutesFun.keys()
+    pilaKeys = []
+    for m in keys:
+        pilaKeys += [m]
+    limit = len(pilaKeys)
+    i = 1
+    while(i < pilaKeys[-1]+1):
+        try:
+            quad = dictionaryStatutesFun[i]
+        except:
+            sys.exit()
+        i = changeQuads(quad, i)
+        stack = mD.init(quad, memoryMap, i)
+        memoryMap = stack[0]
+        i = stack[1]
+        i += 1
     return [memoryMap]
