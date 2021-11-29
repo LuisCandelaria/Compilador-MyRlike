@@ -1,0 +1,21 @@
+program nuevo;
+vars
+    int: i, j, k;
+function int fib(int: h)
+vars
+    int: f, g, n, m;
+{
+    if(h < 2) then {
+        return(h);
+    }
+    n = h - 1;
+    m = h - 2;
+    f = fib(n);
+    g = fib(m);
+    return(f + g);
+}
+main() {
+    read(i);
+    k = fib(i);
+    write(k);
+}

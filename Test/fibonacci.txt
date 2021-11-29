@@ -8,6 +8,7 @@ vars
     siguiente = 1;
     actual = 0;
     aux = 0;
+    f = f + 1;
     for x = 1 to x < f do {
         aux = actual;
         actual = siguiente;
@@ -18,8 +19,7 @@ vars
     
 }
 main() {
-    n = 13;
+    read(n);
     i = 0;
     i = fib(n);
-    write(i);
 }

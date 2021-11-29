@@ -394,6 +394,13 @@ def an_era(quad, i):
             auxDictStatutesFun = copy.deepcopy(dictionaryStatutesFun)
             auxfunctionObj = copy.deepcopy(functionObj)
             auxDirecciones = copy.deepcopy(direcciones)
+            dictionaryAddressParam = {}
+            dictionaryVarLoc = {}
+            dictionaryAddressTemp = {}
+            dictionaryAddressLoc = {}
+            dictionaryAddressParam = {}
+            dictionaryStatutesFun = {}
+            direcciones = {}
             stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutesFun, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
             memoryMap = stack[0]
             dictionaryParam = copy.deepcopy(auxDictParam)
@@ -433,6 +440,13 @@ def an_era(quad, i):
                 auxDictStatutesFun = copy.deepcopy(dictionaryStatutesFun)
                 auxfunctionObj = copy.deepcopy(functionObj)
                 auxDirecciones = copy.deepcopy(direcciones)
+                dictionaryAddressParam = {}
+                dictionaryVarLoc = {}
+                dictionaryAddressTemp = {}
+                dictionaryAddressLoc = {}
+                dictionaryAddressParam = {}
+                dictionaryStatutesFun = {}
+                direcciones = {}
                 stack = severen.init(obj.parametros, memoryMap, dictionaryVarG, dictionaryStatutes, dictionaryFunctions, dictionaryAddress, obj, direccionesNuevas)
                 memoryMap = stack[0]
                 dictionaryParam = copy.deepcopy(auxDictParam)

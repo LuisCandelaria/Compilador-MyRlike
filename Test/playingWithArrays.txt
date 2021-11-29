@@ -1,0 +1,12 @@
+program nuevo;
+vars
+    int: i, j, k[8];
+main() {
+    for i = 0 to i < 8 do {
+        read(j);
+        k[i] = j;
+    }
+    for i = 0 to i < 8 do  {
+        write(k[i]);
+    }
+}

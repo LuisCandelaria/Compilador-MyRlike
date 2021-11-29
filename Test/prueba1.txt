@@ -6,7 +6,6 @@ function int fact(int: j)
 vars
     int: i;
 {
-    p = 1;
     i = j + (p - j * 2 + j);
     if(j == 1) then {
         return(j);
@@ -20,7 +19,7 @@ function void calcula(int: y)
 vars
     int: x;
 {
-    x = 1;
+    x = 0;
     while(x < 10) {
         y = y * arreglo[x];
         x = x + 1;

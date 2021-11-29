@@ -1,0 +1,24 @@
+program nuevo;
+vars
+    int: i, j;
+function int factorial(int: h, acum)
+vars
+    int: f;
+{
+    if(h == 1) then {
+        return(acum);
+    }
+    else {
+        h = h - 1;
+        acum = acum * h;
+        f = factorial(h, acum);
+        return(f);
+    }
+    return(acum);
+}
+main() {
+    read(i);
+    j = 0;
+    i = factorial(i, j);
+    write(i);
+}
