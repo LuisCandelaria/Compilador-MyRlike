@@ -1,0 +1,22 @@
+program nuevo;
+vars
+    int: n, i, j, k, p;
+function int unaFuncion(int: f)
+vars
+    int: x;
+{
+    return(f);
+    
+}
+function void otraFuncion(int: x, y)
+vars
+    int: u;
+{
+    u = x * y;
+    write(u);
+}
+main() {
+    i = 5;
+    i = unaFuncion(i);
+    otraFuncion(5, i);
+}

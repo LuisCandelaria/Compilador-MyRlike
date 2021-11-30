@@ -1,6 +1,6 @@
 program pruebaNueva;
 vars
-    int: i, j, p, arreglo[10];
+    int: i, j, p, arreglo[20];
     float: valor;
 function int fact(int: j)
 vars
@@ -34,7 +34,7 @@ main() {
     write("fact");
     write(i);
 
-    for i = 1 to i < 10 do {
+    for i = 0 to i < 10 do {
         arreglo[i] = p + i;
     } 
      

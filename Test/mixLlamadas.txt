@@ -1,0 +1,23 @@
+program nuevo;
+vars
+    int: i, j;
+function void unaFuncion()
+vars
+    int: f;
+{
+    read(f);
+    otraFuncion(f);
+}
+function void otraFuncion(int: y)
+vars
+    int: w;
+{
+    w = y + 5;
+    write(w);
+}
+main() {
+    read(i);
+    i = i + 5;
+    write(i);
+    unaFuncion();
+}
